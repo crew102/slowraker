@@ -1,0 +1,22 @@
+Package: slowraker
+Type: Package
+Title: A Slow Version of the Rapid Automatic Keyword Extraction (RAKE) Algorithm 
+Version: 0.0.0.9000
+Authors@R: person("Christopher", "Baker", email = "chriscrewbaker@gmail.com",
+    role = c("aut", "cre"))
+Description: TODO
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: TRUE
+Depends:
+    R (>= 3.1)
+Imports:
+    SnowballC,
+    NLP,
+    openNLP
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1.9000
