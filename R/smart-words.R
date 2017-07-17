@@ -1,5 +1,5 @@
 #' @export
-stop_words <-
+smart_words <-
   c("a", "a's", "able", "about", "above", "according", "accordingly",
     "across", "actually", "after", "afterwards", "again", "against",
     "ain't", "all", "allow", "allows", "almost", "alone", "along",
