@@ -10,3 +10,4 @@
 ^inst/dev\.R$
 ^cran-comments\.md$
 ^makefile$
+^data-raw$
