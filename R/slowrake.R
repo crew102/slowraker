@@ -1,5 +1,8 @@
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 
+  if (!grepl("[[:alpha:]]", txt))
+    return(NA)
+
   if (!is.null(keep_pos))
     txt <- filter_pos_tags(txt = txt, keep_pos = keep_pos)
 
