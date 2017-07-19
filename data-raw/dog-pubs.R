@@ -21,8 +21,8 @@ raw_dog_pubs <- data.frame(
 # We'll remove cases of this so it doesn't influence keyword extraction.
 dog_pubs <-
   raw_dog_pubs %>%
+    mutate_all(funs(iconv(., "UTF-8", "latin1"))) %>%
     mutate(abstract = gsub("(Background|Methodology/Principal Findings|Author Summary|Conclusions/significance)([[:upper:]])", " \\2", abstract)) %>%
-    mutate_all(enc2utf8) %>%
     filter(nchar(abstract) > 10) %>%
     slice(1:30)
 
