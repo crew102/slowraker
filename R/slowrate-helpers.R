@@ -69,5 +69,5 @@ process_keyword_df <- function(keyword_df) {
   key_cntsdf <- as.data.frame(key_cnts, stringsAsFactors = F)
   colnames(key_cntsdf) <- c("keyword", "freq")
   key_df <- merge(key_cntsdf, keyword_df, by = "keyword")
-  key_df[order(key_df$score, decreasing = TRUE), ]
+  unique(key_df[order(key_df$score, decreasing = TRUE), ])
 }
