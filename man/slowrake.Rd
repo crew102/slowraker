@@ -27,7 +27,7 @@ A list of data frames, with one data frame per document. Each data frame will ha
 
    \item{score}{The keyword's score, as per the RAKE algorithm. Keywords with higher scores are considered to be more higher quality than those with lower scores.}
 
-   \itemP{keyword_stem}{If you specified \code{stem = TRUE}, you will also get the stemmed versions of all of the keywords. This column contains those stemmed versions.}
+   \itemP{stem}{If you specified \code{stem = TRUE}, you will also get the stemmed versions of the keywords in this column. When you choose stemming, the keyword's score (\code{score}) will be based off of its stem, but the reported number of times that the keyword appears (\code{freq}) will still be based off of the raw, unstemmed variant of the keyword.}
  }
 }
 \description{

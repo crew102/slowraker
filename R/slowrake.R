@@ -29,7 +29,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
   )
 
   if (stem)
-    keyword_df$keyword_stem <- sapply(cand_vec, function(x) paste0(x, collapse = " "))
+    keyword_df$stem <- sapply(cand_vec, function(x) paste0(x, collapse = " "))
 
   process_keyword_df(keyword_df = keyword_df)
 }
@@ -50,7 +50,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 #'
 #'    \item{score}{The keyword's score, as per the RAKE algorithm. Keywords with higher scores are considered to be more higher quality than those with lower scores.}
 #'
-#'    \itemP{keyword_stem}{If you specified \code{stem = TRUE}, you will also get the stemmed versions of all of the keywords. This column contains those stemmed versions.}
+#'    \itemP{stem}{If you specified \code{stem = TRUE}, you will also get the stemmed versions of the keywords in this column. When you choose stemming, the keyword's score (\code{score}) will be based off of its stem, but the reported number of times that the keyword appears (\code{freq}) will still be based off of the raw, unstemmed variant of the keyword.}
 #'  }
 #' @export
 #'
