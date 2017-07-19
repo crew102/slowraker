@@ -16,7 +16,7 @@ slowrake(txt, stop_words = smart_words, word_min_char = 3, stem = TRUE,
 
 \item{stem}{Do you want to stem the words in your corpus before extracting keywords?}
 
-\item{keep_pos}{Which part-of-speech (POS) are accepitble for keywords to have? This should be a vector of POS tags, containing all parts-of-speech that words can take on, in order to be considered as a keyword. The default value \code{c("NN", "NNS", "NNP", "NNPS")} has all POS tags for noun parts of speech. To see the other possible POS tags along with their descriptions, see the \code{\link{pos_tags}} vector (\code{slowraker::pos_tags}) or see their descriptions in \href{Part-Of-Speech Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}.}
+\item{keep_pos}{A vector of part-of-speech (POS) tags that specifies accepitble parts-of-speech for keywords to have. The default value \code{c("NN", "NNS", "NNP", "NNPS")} specifies that all words that have a POS that is noun-related (e.g., plural noun, proper noun, etc.) will be considered when making the candidate keywords. To see the other possible POS tags along with their descriptions, see the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}) or see their descriptions in \href{Part-Of-Speech Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. Specifying \code{keep_pos = NULL} will not filter out any words based on their POS.}
 }
 \value{
 A list of data frames, with one data frame per document. Each data frame will have the following columns:
