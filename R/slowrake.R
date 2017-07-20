@@ -9,7 +9,8 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
   cand_vec <- gen_candidates(txt = txt, stop_words = stop_words,
                              word_min_char = word_min_char)
 
-  keyword <- sapply(cand_vec, function(x) paste0(x, collapse = " "))
+  keyword <- vapply(cand_vec, function(x)
+    paste0(x, collapse = " "), character(1))
 
   # get a list of unique words per keyword, so we don't double count (e.g.,
   # keyword like "vector times vector")
@@ -23,7 +24,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
   word_scores <- calc_scores(wrd_cnts = wrd_cnts, non_diag_deg = non_diag_deg)
 
   # add word scores for each (non-distinct) keyword
-  score <- sapply(cand_vec, function(x) sum(word_scores[x]))
+  score <- unlist(lapply(cand_vec, function(x) sum(word_scores[x])))
 
   keyword_df <- data.frame(
     keyword = keyword,
@@ -32,7 +33,8 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
   )
 
   if (stem)
-    keyword_df$stem <- sapply(cand_vec, function(x) paste0(x, collapse = " "))
+    keyword_df$stem <- vapply(cand_vec, function(x)
+      paste0(x, collapse = " "), character(1))
 
   process_keyword_df(keyword_df = keyword_df)
 }

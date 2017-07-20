@@ -24,7 +24,7 @@ gen_candidates <- function(txt, stop_words, word_min_char) {
 }
 
 gen_word_cnts <- function(cand_vec) {
-  unq_wrds <- unlist(sapply(cand_vec, unique))
+  unq_wrds <- unlist(lapply(cand_vec, unique))
 
   # get freq for each word, along with list of distinct words
   as.matrix(table(unq_wrds))
@@ -36,8 +36,8 @@ gen_non_diag_deg <- function(wrd_cnts, cand_vec) {
   # what about case where word occurs twice "sum sum"
   # To do get this value, we get number of keywords word is in, then weight that by
   # keywords length (-1)..so if keyword is only one word, no impact on degree
-  temp_score1 <- lapply(rownames(wrd_cnts),
-                        function(x) sapply(cand_vec, function(q) x %in% q))
+  temp_score1 <- lapply(rownames(wrd_cnts), function(x)
+    unlist(lapply(cand_vec, function(q) x %in% q)))
   kr <- unlist(sapply(cand_vec, length)) - 1
   sapply(temp_score1, function(x) sum(kr[x]))
 }
