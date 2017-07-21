@@ -52,7 +52,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 #' @param stem Do you want to stem the words in your corpus before extracting keywords?
 #' @param keep_pos A vector of part-of-speech (POS) tags that specifies accepitble parts-of-speech for keywords to have. The default value \code{c("NN", "NNS", "NNP", "NNPS")} specifies that all words that have a POS that is noun-related (e.g., plural noun, proper noun, etc.) will be considered when making the candidate keywords. To see the other possible POS tags along with their descriptions, see the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}) or see their descriptions in \href{Part-Of-Speech Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. Specifying \code{keep_pos = NULL} will not filter out any words based on their POS.
 #'
-#' @return A list of data frames, with one data frame per document. Each data frame will have the following columns:
+#' @return An object of class \code{rakelist}, which is just a list of data frames (one data frame per document/element of \code{txt}). Each data frame will have the following columns:
 #'  \describe{
 #'    \item{keyword}{A keyword that was identified by RAKE. This list is non-distinct, meaning that a keyword can appear in this column nice if it appears in the text twice.}
 #'
@@ -79,5 +79,8 @@ slowrake <- function(txt, stop_words = smart_words, word_min_char = 3,
     setTxtProgressBar(prog_bar, i)
   }
 
-  all_out
+  structure(
+    all_out,
+    class = c(class(all_out), "rakelist")
+  )
 }
