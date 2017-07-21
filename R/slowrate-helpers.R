@@ -9,7 +9,7 @@ split_string <- function(txt, regex) {
   strsplit(x, " ")
 }
 
-clean_words <- function(split, word_min_char) {
+filter_words <- function(split, word_min_char) {
   temp_vec <- lapply(split, function(x) {
     x[x != "" & grepl("[[:alpha:]]", x) & nchar(x) >= word_min_char]
   })
@@ -20,7 +20,7 @@ gen_candidates <- function(txt, stop_words, word_min_char) {
   txt <- tolower(txt)
   regex <- gen_split_regex(stop_words = stop_words)
   split <- split_string(txt = txt, regex = regex)
-  clean_words(split = split, word_min_char = word_min_char)
+  filter_words(split = split, word_min_char = word_min_char)
 }
 
 gen_word_cnts <- function(cand_vec) {
