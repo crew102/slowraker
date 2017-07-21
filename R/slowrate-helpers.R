@@ -46,7 +46,10 @@ calc_scores <- function(wrd_cnts, non_diag_deg) {
   # degree can now be found by adding non-diag component to diag componet (freq)
   mat <- cbind(non_diag_deg, wrd_cnts)
   mat[, 1] <- mat[, 1] + mat[, 2] # add non-diag to diag
-  mat[, 1] / mat[, 2] # degree / freq
+  structure(
+    mat[, 1] / mat[, 2], # degree / freq
+    names = rownames(wrd_cnts)
+  )
 }
 
 # Adapted from http://martinschweinberger.de/docs/articles/PosTagR.pdf
