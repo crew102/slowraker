@@ -1,5 +1,7 @@
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 
+  txt <- paste0(txt, ".")
+
   if (!grepl("[[:alpha:]]", txt))
     return(NA)
 
@@ -8,6 +10,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 
   cand_vec <- gen_candidates(txt = txt, stop_words = stop_words,
                              word_min_char = word_min_char)
+
+  if (length(cand_vec) == 0) return(NA)
+  if (any(!grepl("[[:alpha:]]", unlist(cand_vec)))) return(NA)
 
   keyword <- vapply(cand_vec, function(x)
     paste0(x, collapse = " "), character(1))
