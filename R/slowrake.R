@@ -42,8 +42,8 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 #' Slow RAKE
 #'
 #' @param txt A character vector, where each element of the vector contains the text for one document.
-#' @param stop_words A vector of stop words, which will be removed from your corpus prior to the keyword extraction algorithm being applied. The default value (\code{smart_words}) is the "SMART" vector of stop words (equivilent to \code{\link[tm]{stopwords("SMART")}}).
 #' @param word_min_char The minimum number of characters that a word must have to remain in the corpus. Words with fewer than \code{word_min_char} characters will be removed prior before keyword extraction is conducted.
+#' @param stop_words A vector of stop words, which will be removed from your corpus prior to the keyword extraction algorithm being applied. The default value (\code{smart_words}) is the "SMART" vector of stop words (equivilent to \code{\link[tm]{stopwords("SMART")}}). A value of \code{NULL} indicates that no stop words will be removed.
 #' @param stem Do you want to stem the words in your corpus before extracting keywords?
 #' @param keep_pos A vector of part-of-speech (POS) tags that specifies accepitble parts-of-speech for keywords to have. The default value \code{c("NN", "NNS", "NNP", "NNPS")} specifies that all words that have a POS that is noun-related (e.g., plural noun, proper noun, etc.) will be considered when making the candidate keywords. To see the other possible POS tags along with their descriptions, see the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}) or see their descriptions in \href{Part-Of-Speech Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. Specifying \code{keep_pos = NULL} will not filter out any words based on their POS.
 #'
