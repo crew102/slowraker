@@ -1,3 +1,20 @@
+# filter_pos_tags Adapted from:
+# http://martinschweinberger.de/docs/articles/PosTagR.pdf
+filter_pos_tags <- function(txt, keep_pos) {
+  str_txt <- NLP::as.String(txt)
+  word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
+  a2 <- NLP::Annotation(1L, "sentence", 1L, nchar(str_txt))
+  a2 <- NLP::annotate(str_txt, word_token_annotator, a2)
+  a3 <- NLP::annotate(str_txt, openNLP::Maxent_POS_Tag_Annotator(), a2)
+  a3w <- a3[a3$type == "word"]
+  pos_tagged <- unlist(lapply(a3w$features, `[[`, "POS"))
+  to_keep <- pos_tagged %in% keep_pos
+  myvec <- str_txt[a3w]
+  # Replace unwanted words (based on POS) with a phrase delim:
+  myvec[!to_keep] <- "."
+  paste(myvec, collapse = " ")
+}
+
 gen_split_regex <- function(stop_words) {
   phrase_end_regex <- '[,.?():;"-]'
   if (!is.null(stop_words)) {
@@ -14,62 +31,61 @@ split_string <- function(txt, regex) {
   strsplit(x, " ")
 }
 
-filter_words <- function(split, word_min_char) {
-  temp_vec <- lapply(split, function(x) {
+get_cand_words <- function(txt, stop_words) {
+  regex <- gen_split_regex(stop_words = stop_words)
+  split_string(txt = txt, regex = regex)
+}
+
+filter_words <- function(cand_words, word_min_char) {
+  temp_vec <- lapply(cand_words, function(x) {
     x[x != "" & grepl("[[:alpha:]]", x) & nchar(x) >= word_min_char]
   })
-  temp_vec[sapply(temp_vec, length) > 0]
+  temp_vec[vapply(temp_vec, length, numeric(1)) > 0]
 }
 
-gen_candidates <- function(txt, stop_words, word_min_char) {
-  txt <- tolower(txt)
-  regex <- gen_split_regex(stop_words = stop_words)
-  split <- split_string(txt = txt, regex = regex)
-  filter_words(split = split, word_min_char = word_min_char)
-}
-
-gen_word_cnts <- function(cand_vec) {
-  unq_wrds <- unlist(lapply(cand_vec, unique))
-
-  # get freq for each word, along with list of distinct words
+gen_word_cnts <- function(cand_words) {
+  # Get a list of unique words in each keyword so we don't double count (e.g.,
+  # keyword like "vector times vector").
+  unq_wrds <- unlist(lapply(cand_words, unique))
   as.matrix(table(unq_wrds))
 }
 
-gen_non_diag_deg <- function(wrd_cnts, cand_vec) {
-  # the non-diag component of the degree  of each word is the number of times
-  # that it co-occurs with another distinct word...
+gen_non_diag_deg <- function(wrd_cnts, cand_words) {
+  # The non-diagonal component of the degree of each word is the number of times
+  # that it co-occurs with another distinct word...To do get this value, we get
+  # the number of keywords the word is in and weight this by the keyword's
+  # length, then substract 1 to get non-diag component of degree.
   # what about case where word occurs twice "sum sum"
-  # To do get this value, we get number of keywords word is in, then weight that by
-  # keywords length (-1)..so if keyword is only one word, no impact on degree
   temp_score1 <- lapply(rownames(wrd_cnts), function(x)
-    unlist(lapply(cand_vec, function(q) x %in% q)))
-  kr <- unlist(sapply(cand_vec, length)) - 1
-  sapply(temp_score1, function(x) sum(kr[x]))
+    unlist(lapply(cand_words, function(q) x %in% q)))
+  kr <- vapply(cand_words, length, numeric(1)) - 1
+  vapply(temp_score1, function(x) sum(kr[x]), numeric(1))
 }
 
-calc_scores <- function(wrd_cnts, non_diag_deg) {
-  # degree can now be found by adding non-diag component to diag componet (freq)
+calc_word_scores <- function(wrd_cnts, non_diag_deg) {
+  # Degree can now be found by adding non-diagonal component of degree to
+  # the diagonal component (i.e., a word's frequency)
   mat <- cbind(non_diag_deg, wrd_cnts)
-  mat[, 1] <- mat[, 1] + mat[, 2] # add non-diag to diag
+  mat[, 1] <- mat[, 1] + mat[, 2] # Add non-diag to diag
   structure(
     mat[, 1] / mat[, 2], # degree / freq
     names = rownames(wrd_cnts)
   )
 }
 
-# Adapted from http://martinschweinberger.de/docs/articles/PosTagR.pdf
-filter_pos_tags <- function(txt, keep_pos) {
-  str_txt <- NLP::as.String(txt)
-  word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
-  a2 <- NLP::Annotation(1L, "sentence", 1L, nchar(str_txt))
-  a2 <- NLP::annotate(str_txt, word_token_annotator, a2)
-  a3 <- NLP::annotate(str_txt, openNLP::Maxent_POS_Tag_Annotator(), a2)
-  a3w <- a3[a3$type == "word"]
-  pos_tagged <- unlist(lapply(a3w$features, `[[`, "POS"))
-  to_keep <- pos_tagged %in% keep_pos
-  myvec <- str_txt[a3w]
-  myvec[!to_keep] <- "."
-  paste(myvec, collapse = " ")
+calc_keyword_scores <- function(cand_words) {
+  # Get word counts for all distinct words
+  wrd_cnts <- gen_word_cnts(cand_words = cand_words)
+  # Get the non-diagonal component of a word's degree score.
+  non_diag_deg <- gen_non_diag_deg(wrd_cnts = wrd_cnts, cand_words = cand_words)
+
+  # Get the word scores as per degree/frequency
+  word_scores <- calc_word_scores(wrd_cnts = wrd_cnts,
+                                  non_diag_deg = non_diag_deg)
+
+  # Add word scores for the words in each (non-distinct) keyword, to get
+  # keyword-level scores
+  unlist(lapply(cand_words, function(x) sum(word_scores[x])))
 }
 
 process_keyword_df <- function(keyword_df) {

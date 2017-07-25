@@ -1,35 +1,35 @@
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 
+  # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
 
+  # Make sure there is an alpha char in text before filtering based on POS (pos)
   if (!grepl("[[:alpha:]]", txt))
     return(NA)
 
+  # Remove words based on their POS
   if (!is.null(keep_pos))
     txt <- filter_pos_tags(txt = txt, keep_pos = keep_pos)
 
-  cand_vec <- gen_candidates(txt = txt, stop_words = stop_words,
+  txt <- tolower(txt)
+  # Split txt into list of keywords based on stopwords/phrase delims
+  cand_words <- get_cand_words(txt = txt, stop_words = stop_words)
+  # Filter out words that are too short
+  cand_words <- filter_words(cand_words = cand_words,
                              word_min_char = word_min_char)
 
-  if (length(cand_vec) == 0) return(NA)
-  if (any(!grepl("[[:alpha:]]", unlist(cand_vec)))) return(NA)
+  # Make sure we still have at least one keyword
+  if (length(cand_words) == 0) return(NA)
 
-  keyword <- vapply(cand_vec, function(x)
+  # Convert word vectors (one vector = words in a keyword) into keywords
+  keyword <- vapply(cand_words, function(x)
     paste0(x, collapse = " "), character(1))
 
-  # get a list of unique words per keyword, so we don't double count (e.g.,
-  # keyword like "vector times vector")
   if (stem)
-    cand_vec <- lapply(cand_vec, SnowballC::wordStem)
+    cand_words <- lapply(cand_words, SnowballC::wordStem)
 
-  wrd_cnts <- gen_word_cnts(cand_vec = cand_vec)
-
-  non_diag_deg <- gen_non_diag_deg(wrd_cnts = wrd_cnts, cand_vec = cand_vec)
-
-  word_scores <- calc_scores(wrd_cnts = wrd_cnts, non_diag_deg = non_diag_deg)
-
-  # add word scores for each (non-distinct) keyword
-  score <- unlist(lapply(cand_vec, function(x) sum(word_scores[x])))
+  # Calculate keyword-level scores
+  score <- calc_keyword_scores(cand_words = cand_words)
 
   keyword_df <- data.frame(
     keyword = keyword,
@@ -37,10 +37,12 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
     stringsAsFactors = FALSE
   )
 
+  # Convert stemmed versions of word vectors into keywords
   if (stem)
-    keyword_df$stem <- vapply(cand_vec, function(x)
+    keyword_df$stem <- vapply(cand_words, function(x)
       paste0(x, collapse = " "), character(1))
 
+  # Create output data frames
   process_keyword_df(keyword_df = keyword_df)
 }
 
