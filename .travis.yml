@@ -11,7 +11,7 @@ matrix:
 
 branches:
   except:
-  - master
+  - dev
 
 notifications:
   email: false
