@@ -7,6 +7,9 @@ dog_pubs <- ft_search(query = 'dog', from = 'plos', limit = 50)
 x <- ft_get(dog_pubs)
 
 raw_dog_pubs <- data.frame(
+  doi = x %>%
+    chunks("doi") %>%
+    unlist(),
   title = x %>%
     chunks("title") %>%
     unlist(),

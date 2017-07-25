@@ -4,8 +4,9 @@
 \name{dog_pubs}
 \alias{dog_pubs}
 \title{Dog publications}
-\format{A data frame with 30 rows and 2 variables:
+\format{A data frame with 30 rows and 3 variables:
 \describe{
+  \item{doi}{The publication's DOI}
   \item{title}{The publication's title}
   \item{abstract}{The publication's abstract}
 }}
