@@ -1,10 +1,13 @@
 Package: slowraker
 Type: Package
-Title: A Slow Version of the Rapid Automatic Keyword Extraction (RAKE) Algorithm 
+Title: A Slow Implementation of the Rapid Automatic Keyword Extraction (RAKE) 
+    Algorithm 
 Version: 0.0.0.9000
 Authors@R: person("Christopher", "Baker", email = "chriscrewbaker@gmail.com",
     role = c("aut", "cre"))
-Description: TODO
+Description: Provdides a mostly pure-R implementation of the RAKE algorithm, 
+    which can be used to extract keywords from documents without any training 
+    data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
