@@ -1,5 +1,5 @@
 gen_split_regex <- function(stop_words) {
-  phrase_end_regex <- "[,.?():;-]|\""
+  phrase_end_regex <- '[,.?():;"-]'
   if (!is.null(stop_words)) {
     stop_words_wrds <- paste0("\\b", stop_words, "\\b")
     stop_regex <- paste0(stop_words_wrds, collapse = "|")
