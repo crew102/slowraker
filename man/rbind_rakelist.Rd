@@ -11,6 +11,17 @@ rbind_rakelist(rakelist, doc_id = NULL)
 
 \item{doc_id}{An optional vector of document IDs, which should be the same length as \code{rakelist}. These IDs will be added to results data frame.}
 }
+\value{
+A single data frame which contains the documents' keywords. The \code{doc_id} column in this data frame denotes which document a keyword was found in.
+}
 \description{
 rbind a rakelist
+}
+\examples{
+rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
+
+# Without specifying doc_id:
+rbind_rakelist(rakelist = rakelist, doc_id = NULL)
+#...With specifying doc_id:
+rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 }
