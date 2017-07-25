@@ -13,7 +13,8 @@ Depends:
 Imports:
     SnowballC,
     NLP,
-    openNLP
+    openNLP,
+    utils
 Suggests:
     knitr,
     rmarkdown,
