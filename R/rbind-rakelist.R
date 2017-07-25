@@ -17,6 +17,11 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
     asrt(length(rakelist) == length(unique(doc_id)), "doc_id must have the ",
          "the same number of distinct elements as rakelist")
   }
+
+  numeric_ids <- is.numeric(doc_id)
+  if (numeric_ids)
+    doc_id <- as.character(doc_id)
+
   names(rakelist) <- doc_id
 
   doc_ids_repped <- lapply(doc_id, function(x) {
@@ -26,5 +31,9 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
 
   df <- do.call("rbind", rakelist)
   doc_id <- unlist(doc_ids_repped)
+
+  if (numeric_ids)
+    doc_id <- as.numeric(doc_id)
+
   cbind(doc_id, df, stringsAsFactors = FALSE, row.names = NULL)
 }
