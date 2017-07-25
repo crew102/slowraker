@@ -74,7 +74,7 @@ filter_pos_tags <- function(txt, keep_pos) {
 
 process_keyword_df <- function(keyword_df) {
   key_cnts <- table(keyword_df$keyword)
-  key_cntsdf <- as.data.frame(key_cnts, stringsAsFactors = F)
+  key_cntsdf <- as.data.frame(key_cnts, stringsAsFactors = FALSE)
   colnames(key_cntsdf) <- c("keyword", "freq")
   key_df <- merge(key_cntsdf, keyword_df, by = "keyword")
   unique(key_df[order(key_df$score, decreasing = TRUE), ])
