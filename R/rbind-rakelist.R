@@ -11,8 +11,12 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
   asrt("rakelist" %in% class(rakelist), "rakelist must be an object of class ",
        "'rakelist'. See examples.")
 
-  if (is.null(doc_id))
+  if (is.null(doc_id)) {
     doc_id <- as.character(seq_along(rakelist))
+  } else {
+    asrt(length(rakelist) == length(unique(doc_id)), "doc_id must have the ",
+         "the same number of distinct elements as rakelist")
+  }
   names(rakelist) <- doc_id
 
   doc_ids_repped <- lapply(doc_id, function(x) {
