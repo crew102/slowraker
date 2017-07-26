@@ -9,6 +9,7 @@
 smart_words
 }
 \description{
-A vector containing the stop words taken from the SMART information retrieval system. See \code{\link[tm]{stopwords("SMART")}} for more details.
+A vector containing the stop words taken from the SMART information retrieval
+system. See \code{\link[tm]{stopwords("SMART")}} for more details.
 }
 \keyword{datasets}

@@ -1,9 +1,11 @@
 #' Part-of-speech (POS) tags
 #'
-#' A data frame containing all possible parts-of-speech, as per the \code{\link{openNLP}} package. This list was taken from \href{Part-Of-Speech Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. See details section below.
+#' A data frame containing all possible parts-of-speech, as per the
+#' \code{\link{openNLP}} package. This list was taken from \href{Part-Of-Speech
+#' Tagging with R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. See
+#' details section below.
 #'
 #' @details
-#'
 #' \code{pos_tags} contains the following two columns:
 #' \describe{
 #'   \item{tag}{The abbreviation for the part-of-speech (i.e., its tag)}
