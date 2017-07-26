@@ -78,12 +78,12 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 #' # Only consider words that are plural nouns (NNS) when creating candidate
 #' # keywords:
 #' slowrake(txt = c("dogs are the best, don't you think?",
-#'                  "some people think dogs are the best, but i love my cat.")
+#'                  "some people think dogs are the best, but i love my cat."),
 #'          keep_pos = "NNS")
 #'
 #' # ...Now only consider singular nouns:
 #' slowrake(txt = c("dogs are the best, don't you think?",
-#'                  "some people think dogs are the best, but i love my cat.")
+#'                  "some people think dogs are the best, but i love my cat."),
 #'          keep_pos = "NN")
 #'
 #' # Removing "dogs" in this txt means no longer have any candidate keywords:
