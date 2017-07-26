@@ -99,13 +99,13 @@ slowrake <- function(txt, stop_words = smart_words, word_min_char = 3,
 
   num_docs <- length(txt)
   all_out <- vector(mode = "list", length = num_docs)
-  prog_bar <- txtProgressBar(min = 0, max = num_docs, style = 3)
+  prog_bar <- utils::txtProgressBar(min = 0, max = num_docs, style = 3)
 
   for (i in seq_along(txt)) {
     all_out[[i]] <- slowrake_atomic(txt = txt[i], stop_words = stop_words,
                                     word_min_char = word_min_char, stem = stem,
                                     keep_pos = keep_pos)
-    setTxtProgressBar(prog_bar, i)
+    utils::setTxtProgressBar(prog_bar, i)
   }
 
   structure(
