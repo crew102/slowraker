@@ -1,3 +1,6 @@
+# Although all of the code in slowrake_atomic is vectorized (and thus could be
+# applied to a vector of txt instead of an atomic element of txt), we still
+# choose to loop over elements of txt so that we can see progress of slowrake.
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, keep_pos) {
 
   # Make sure there is at least one phrase delimitor in the txt
