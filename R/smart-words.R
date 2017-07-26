@@ -1,7 +1,8 @@
 #' SMART stopwords
 #'
 #' A vector containing the stop words taken from the SMART information retrieval
-#' system. See \code{\link[tm]{stopwords("SMART")}} for more details.
+#' system. See \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')}
+#' for more details.
 #'
 #' @export
 smart_words <-
