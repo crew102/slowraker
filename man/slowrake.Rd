@@ -13,8 +13,9 @@ text for one document.}
 
 \item{stop_words}{A vector of stop words which will be removed from your
 documents. The default value (\code{smart_words}) contains the 'SMART' stop
-words (equivalent to \code{\link[tm]{stopwords('SMART')}}). A value of
-\code{NULL} indicates that no stop words will be removed.}
+words (equivalent to
+\href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')})
+. A value of \code{NULL} indicates that no stop words will be removed.}
 
 \item{word_min_char}{The minimum number of characters that a word must have
 to remain in the corpus. Words with fewer than \code{word_min_char}
@@ -33,29 +34,30 @@ POS that is noun-related (e.g., plural noun, proper noun, etc.) will be
 considered when creating the list of candidate keywords. To see the other
 possible POS tags along with their descriptions, see the
 \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}), or
-see their descriptions in \href{Part-Of-Speech Tagging with
-R}{http://martinschweinberger.de/docs/articles/PosTagR.pdf}. Specifying
-\code{keep_pos = NULL} will not filter out any words based on their POS.}
+see their descriptions in \href{http://martinschweinberger.de/docs/articles/PosTagR.pdf}{Part-Of-Speech Tagging with R}. Specifying \code{keep_pos = NULL} will not
+filter out any words based on their POS.}
 }
 \value{
 An object of class \code{rakelist}, which is just a list of data
   frames (one data frame per document/element of \code{txt}). Each data frame
-  will have the following columns: \describe{ \item{keyword}{A keyword that
-  was identified by RAKE.} \item{freq}{The number of times the keyword
-  appears in the document} \item{score}{The keyword's score, as per the RAKE
-  algorithm. Keywords with higher scores are considered to be more higher
-  quality, as compared to those with lower scores.} \item{stem}{If you
-  specified \code{stem = TRUE}, you will also get the stemmed versions of the
-  keywords in this column. When you choose stemming, the keyword's score
-  (\code{score}) will be based off of its stem, but the reported number of
-  times that the keyword appears (i.e., \code{freq}) will still be based off
-  of the raw, unstemmed version of the keyword.} }
+  will have the following columns:
+  \describe{
+    \item{keyword}{A keyword that was identified by RAKE.}
+    \item{freq}{The number of times the keyword appears in the document}
+    \item{score}{The keyword's score, as per the RAKE algorithm. Keywords
+    with higher scores are considered to be more higher quality, as compared
+    to those with lower scores.}
+    \item{stem}{If you specified \code{stem = TRUE}, you will also get the
+    stemmed versions of the keywords in this column. When you choose stemming,
+    the keyword's score (\code{score}) will be based off of its stem, but the
+    reported number of times that the keyword appears (i.e., \code{freq})
+    will still be based off of the raw, unstemmed version of the keyword.}
+  }
 }
 \description{
 A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
-algorithm. See \href{Automatic keyword extraction from individual
-documents}{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}
-for details on how RAKE works.
+algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for details on
+how RAKE works.
 }
 \examples{
 slowrake(txt = dog_pubs$title[1:5])
@@ -73,7 +75,7 @@ slowrake(txt = c("dogs are the best, don't you think?",
                  "some people think dogs are the best, but i love my cat."),
          keep_pos = "NN")
 
-# Removing "dogs" in this txt means no longer have any candidate keywords:
+# Removing "dogs" in this txt means we no longer have any candidate keywords:
 slowrake(txt = "dogs are the best, don't you think?",
          stop_words = "dogs")
 
