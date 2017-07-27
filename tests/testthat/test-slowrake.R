@@ -27,12 +27,6 @@ test_that("slowrake removes stopwords", {
   expect_true(is.na(unlist(out)))
 })
 
-test_that("slowrake works when no stopwords are specified", {
-  out1 <- slowrake("yourself", stop_words = NULL)
-  out2 <- slowrake("dog", stop_words = NULL)
-  expect_true(is.na(unlist(out1)) && nrow(out2[[1]]) == 1)
-})
-
 test_that("pos filtering works as expected", {
   out1 <- slowrake("dogs are awesome", filter_pos = "NNS")
   out2 <- slowrake("dogs found food", filter_pos = NULL)
