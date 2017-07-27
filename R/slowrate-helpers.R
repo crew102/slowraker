@@ -1,18 +1,25 @@
-# filter_pos_tags Adapted from:
+# Adapted from:
 # http://martinschweinberger.de/docs/articles/PosTagR.pdf
-filter_pos_tags <- function(txt, keep_pos) {
+get_pos_tags <- function(txt) {
   str_txt <- NLP::as.String(txt)
   word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
   a2 <- NLP::Annotation(1L, "sentence", 1L, nchar(str_txt))
   a2 <- NLP::annotate(str_txt, word_token_annotator, a2)
   a3 <- NLP::annotate(str_txt, openNLP::Maxent_POS_Tag_Annotator(), a2)
   a3w <- a3[a3$type == "word"]
-  pos_tagged <- unlist(lapply(a3w$features, `[[`, "POS"))
-  to_keep <- pos_tagged %in% keep_pos
-  myvec <- str_txt[a3w]
+  pos <- unlist(lapply(a3w$features, `[[`, "POS"))
+  data.frame(
+    word = str_txt[a3w],
+    pos = pos,
+    stringsAsFactors = FALSE
+  )
+}
+
+filter_pos_tags <- function(pos_word_df, filter_pos) {
+  in_filter_pos <- pos_word_df$pos %in% filter_pos
   # Replace unwanted words (based on POS) with a phrase delim:
-  myvec[!to_keep] <- "."
-  paste(myvec, collapse = " ")
+  pos_word_df$word[in_filter_pos] <- "."
+  paste(pos_word_df$word, collapse = " ")
 }
 
 gen_split_regex <- function(stop_words) {

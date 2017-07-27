@@ -18,7 +18,7 @@ test_that("slowrake works for txt without alpha chars", {
 })
 
 test_that("slowrake works when all txt is removed after pos filter", {
-  out <- slowrake("quickly walk")
+  out <- slowrake("walking")
   expect_true(is.na(unlist(out)))
 })
 
@@ -34,11 +34,10 @@ test_that("slowrake works when no stopwords are specified", {
 })
 
 test_that("pos filtering works as expected", {
-  out1 <- slowrake("dogs are awesome")
-  out2 <- slowrake("dogs are awesome", keep_pos = NULL)
-  out3 <- slowrake("dogs found food", keep_pos = "VBD")
+  out1 <- slowrake("dogs are awesome", filter_pos = "NNS")
+  out2 <- slowrake("dogs found food", filter_pos = NULL)
   expect_true(
-    nrow(out1[[1]]) == 1 && nrow(out2[[1]]) == 2 && nrow(out3[[1]]) == 1
+    nrow(out2[[1]]) == 1 && nrow(out2[[1]]) == 1
   )
 })
 
