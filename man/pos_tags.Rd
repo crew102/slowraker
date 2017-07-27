@@ -15,7 +15,7 @@ package. This list was taken from \href{http://martinschweinberger.de/docs/artic
 following two columns:
 \describe{
   \item{tag}{The abbreviation for the part-of-speech (i.e., its tag)}
-  \item{dscrp}{A short description of the part-of-speech}
+  \item{description}{A short description of the part-of-speech}
 }
 }
 \keyword{datasets}

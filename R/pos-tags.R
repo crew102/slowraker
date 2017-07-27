@@ -6,7 +6,7 @@
 #' following two columns:
 #' \describe{
 #'   \item{tag}{The abbreviation for the part-of-speech (i.e., its tag)}
-#'   \item{dscrp}{A short description of the part-of-speech}
+#'   \item{description}{A short description of the part-of-speech}
 #' }
 #'
 #' @export
@@ -31,5 +31,5 @@ pos_tags <-
               "Verb, 3rd person singular present", "Wh-determiner",
               "Wh-pronoun", "Possessive wh-pronoun", "Wh-adverb")
     ),
-  .Names = c("tag", "dscrp"), row.names = c(NA, -36L), class = "data.frame"
-  )
+  .Names = c("tag", "description"), row.names = c(NA, -36L),
+  class = "data.frame")
