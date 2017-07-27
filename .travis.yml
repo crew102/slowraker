@@ -9,6 +9,9 @@ matrix:
   - r: devel
   - os: osx
 
+before_install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then brew update; brew cask install java; fi
+
 branches:
   except:
   - dev
