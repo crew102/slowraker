@@ -1,0 +1,59 @@
+---
+output: github_document
+title: "slowraker"
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+> A slow version of the Rapid Automatic Keyword Extraction (RAKE) algorithm
+
+[![Linux Build Status](https://travis-ci.org/crew102/slowraker.svg?branch=master)](https://travis-ci.org/crew102/slowraker) 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/2ycx1m182va333ye?svg=true)](https://ci.appveyor.com/project/crew102/slowraker)
+
+## Installation
+
+```r
+if (!("devtools" %in% installed.packages()[,1]))
+  install.packages("devtools")
+
+devtools::install_github("crew102/slowraker")
+```
+
+## Basic usage
+
+There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of text using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+
+```{r, eval = FALSE}
+library(slowraker)
+
+data("dog_pubs")
+rakelist <- slowrake(txt = dog_pubs$title[1:5])
+```
+
+```{r, eval = TRUE, results = 'hide', echo = FALSE}
+# Note, we have to split the README.Rmd up like this so that it doesn't print 
+# out the progress bar.
+library(slowraker)
+options(width = 100)
+
+data("dog_pubs")
+rakelist <- slowrake(txt = dog_pubs$title[1:5])
+```
+
+`slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document:
+
+```{r}
+rakelist
+```
+
+We can bind these data frames together using `rbind_rakelist()`:
+
+```{r}
+rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
+head(rakedf, 5)
+```

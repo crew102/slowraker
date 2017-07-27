@@ -25,6 +25,11 @@ library(slowraker)
 
 data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$title[1:5])
+```
+
+`slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document:
+
+``` r
 rakelist
 #> # A rakelist containing 5 data frames:
 #>  $ :'data.frame':    4 obs. of  4 variables:
@@ -40,20 +45,15 @@ rakelist
 #> #...With 3 more data frames.
 ```
 
-`slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document. For example, in the above call, we were returned a list of 5 data frames, one data frame for each publication. We can bind these data frames together using `rbind_rakelist()`:
+We can bind these data frames together using `rbind_rakelist()`:
 
 ``` r
 rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 head(rakedf, 5)
-#>                       doc_id             keyword freq score           stem
-#> 10.1371/journal.pone.0132820     assistance dogs    1   4.0     assist dog
-#> 10.1371/journal.pone.0132820 identification tags    1   4.0    identif tag
-#> 10.1371/journal.pone.0132820          california    1   1.0     california
-#> 10.1371/journal.pone.0132820       registrations    1   1.0        registr
-#> 10.1371/journal.pone.0176018    guide dog owners    1   7.5 guid dog owner
+#>                         doc_id             keyword freq score           stem
+#> 1 10.1371/journal.pone.0132820     assistance dogs    1   4.0     assist dog
+#> 2 10.1371/journal.pone.0132820 identification tags    1   4.0    identif tag
+#> 3 10.1371/journal.pone.0132820          california    1   1.0     california
+#> 4 10.1371/journal.pone.0132820       registrations    1   1.0        registr
+#> 5 10.1371/journal.pone.0176018    guide dog owners    1   7.5 guid dog owner
 ```
-
-Learning more
--------------
-
-See the object documentation for `slowrake()` for more details (`?slowrake`).
