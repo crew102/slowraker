@@ -5,7 +5,7 @@ Title: A Slow Implementation of the Rapid Automatic Keyword Extraction (RAKE)
 Version: 0.0.0.9000
 Authors@R: person("Christopher", "Baker", email = "chriscrewbaker@gmail.com",
     role = c("aut", "cre"))
-Description: Provdides a mostly pure-R implementation of the RAKE algorithm, 
+Description: Provides a mostly pure-R implementation of the RAKE algorithm, 
     which can be used to extract keywords from documents without any training 
     data.
 License: MIT + file LICENSE
