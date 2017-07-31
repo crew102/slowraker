@@ -102,9 +102,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
 #' @export
 #'
 #' @examples
-#' slowrake(txt = dog_pubs$title[1:5])
+#' slowrake(txt = dog_pubs$title[1])
 #'
-#' slowrake(txt = dog_pubs$title[1:5], stem = FALSE)
+#' slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
 #'
 #' # Only consider words that are plural nouns (NNS) when creating candidate
 #' # keywords:

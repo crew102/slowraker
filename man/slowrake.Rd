@@ -62,9 +62,9 @@ algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/047
 how RAKE works.
 }
 \examples{
-slowrake(txt = dog_pubs$title[1:5])
+slowrake(txt = dog_pubs$title[1])
 
-slowrake(txt = dog_pubs$title[1:5], stem = FALSE)
+slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
 
 # Only consider words that are plural nouns (NNS) when creating candidate
 # keywords:
