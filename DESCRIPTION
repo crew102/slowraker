@@ -19,10 +19,7 @@ Imports:
     openNLP,
     utils
 Suggests:
-    knitr,
-    rmarkdown,
     testthat
 SystemRequirements:
     Java (>= 5.0)
-VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
