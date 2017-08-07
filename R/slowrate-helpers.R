@@ -1,4 +1,4 @@
-# Adapted from:
+# get_pos_tags adapted from:
 # http://martinschweinberger.de/docs/articles/PosTagR.pdf
 get_pos_tags <- function(txt) {
   str_txt <- NLP::as.String(txt)
@@ -17,7 +17,7 @@ get_pos_tags <- function(txt) {
 
 filter_pos_tags <- function(pos_word_df, filter_pos) {
   in_filter_pos <- pos_word_df$pos %in% filter_pos
-  # Replace unwanted words (based on POS) with a phrase delim:
+  # Replace unwanted words (based on POS) with a phrase delim (.):
   pos_word_df$word[in_filter_pos] <- "."
   paste(pos_word_df$word, collapse = " ")
 }
@@ -52,16 +52,16 @@ filter_words <- function(cand_words, word_min_char) {
 
 gen_word_cnts <- function(cand_words) {
   # Get a list of unique words in each keyword so we don't double count (e.g.,
-  # keyword like "vector times vector").
+  # don't double count "vector" keyword "vector times vector").
   unq_wrds <- unlist(lapply(cand_words, unique))
   as.matrix(table(unq_wrds))
 }
 
 gen_non_diag_deg <- function(wrd_cnts, cand_words) {
-  # The non-diagonal component of the degree of each word is the number of times
-  # that it co-occurs with another distinct word...To do get this value, we get
+  # The non-diagonal component of a word's degree is the number of times that
+  # the word co-occurs with another distinct word...To get this value, we count
   # the number of keywords the word is in and weight this by the keyword's
-  # length, then substract 1 to get non-diag component of degree.
+  # length, then substract 1.
   # what about case where word occurs twice "sum sum"
   temp_score1 <- lapply(rownames(wrd_cnts), function(x)
     unlist(lapply(cand_words, function(q) x %in% q)))
@@ -71,7 +71,7 @@ gen_non_diag_deg <- function(wrd_cnts, cand_words) {
 
 calc_word_scores <- function(wrd_cnts, non_diag_deg) {
   # Degree can now be found by adding non-diagonal component of degree to
-  # the diagonal component (i.e., a word's frequency)
+  # the diagonal component (diagonal component = a word's frequency)
   mat <- cbind(non_diag_deg, wrd_cnts)
   mat[, 1] <- mat[, 1] + mat[, 2] # Add non-diag to diag
   structure(
@@ -83,15 +83,15 @@ calc_word_scores <- function(wrd_cnts, non_diag_deg) {
 calc_keyword_scores <- function(cand_words) {
   # Get word counts for all distinct words
   wrd_cnts <- gen_word_cnts(cand_words = cand_words)
-  # Get the non-diagonal component of a word's degree score.
+  # Get the non-diagonal component of a word's degree score
   non_diag_deg <- gen_non_diag_deg(wrd_cnts = wrd_cnts, cand_words = cand_words)
 
-  # Get the word scores as per degree/frequency
+  # Get each word's score as per degree/frequency
   word_scores <- calc_word_scores(wrd_cnts = wrd_cnts,
                                   non_diag_deg = non_diag_deg)
 
   # Add word scores for the words in each (non-distinct) keyword, to get
-  # keyword-level scores
+  # keyword scores
   unlist(lapply(cand_words, function(x) sum(word_scores[x])))
 }
 

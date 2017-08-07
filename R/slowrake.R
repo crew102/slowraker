@@ -1,12 +1,15 @@
 # Although all of the code in slowrake_atomic is vectorized (and thus could be
 # applied to a vector of txt instead of an atomic element of txt), we still
 # choose to loop over elements of txt so that we can see progress of slowrake.
+# The comments refer to tokens as "words" (e.g., "hi" is a word) and refer to
+# contiguous sequences of tokens (i.e., phrases) as "keywords" (e.g., "hi there"
+# could be a keyword).
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
 
   # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
 
-  # Make sure there is an alpha char in text before filtering based on POS (pos)
+  # Make sure there is an alpha char in text before filtering based on POS
   if (!grepl("[[:alpha:]]", txt))
     return(NA)
 
@@ -26,14 +29,15 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
   # Make sure we still have at least one keyword
   if (length(cand_words) == 0) return(NA)
 
-  # Convert word vectors (one vector = words in a keyword) into keywords
+  # Convert word vectors into keywords (a word vector contains the words in a
+  # keyword)
   keyword <- vapply(cand_words, function(x)
     paste0(x, collapse = " "), character(1))
 
   if (stem)
     cand_words <- lapply(cand_words, SnowballC::wordStem)
 
-  # Calculate keyword-level scores
+  # Calculate keyword scores
   score <- calc_keyword_scores(cand_words = cand_words)
 
   keyword_df <- data.frame(
