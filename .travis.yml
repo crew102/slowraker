@@ -7,12 +7,6 @@ matrix:
   - r: oldrel
   - r: release
   - r: devel
-  - os: osx
-  allow_failures:
-  - os: osx
-
-before_install:
-  - if [ $TRAVIS_OS_NAME != "linux" ]; then brew update; brew install r-cran-rjava; fi
 
 branches:
   except:
