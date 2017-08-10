@@ -4,7 +4,7 @@
 \alias{slowrake}
 \title{Slow RAKE}
 \usage{
-slowrake(txt, stop_words = smart_words, filter_pos = c("VB", "VBD", "VBG",
+slowrake(txt, stop_words = smart_words, stop_pos = c("VB", "VBD", "VBG",
   "VBN", "VBP", "VBZ"), word_min_char = 3, stem = TRUE)
 }
 \arguments{
@@ -17,17 +17,14 @@ words (equivalent to
 \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')})
 . A value of \code{NULL} indicates that no stop words will be removed.}
 
-\item{filter_pos}{The parts-of-speech (POS) that should be filtered from
-the documents prior to keyword extraction. In other words, if you include
-a part-of-speech in \code{filter_pos}, then all words that are assigned to
-that POS will be removed prior to the RAKE algorithm. \code{filter_pos}
-should be a vector of POS tags. To see all POS tags along with their
-definitions (i.e., the POS that the tag denotes),see the
-\code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}). The
-default is to remove all parts-of-speech that are verbs (e.g.,
-\code{filter_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ")}). Set
-\code{filter_pos = NULL} if you don't want to remove any words based on
-its part-of-speech.}
+\item{stop_pos}{Any words that have a part-of-speech (POS) that appears in
+\code{stop_pos} will be considered a stop word. \code{stop_pos} should be a
+vector of POS tags. To see all POS tags along with their definitions (i.e.,
+the POS that the tag denotes), see the \code{\link{pos_tags}} data frame
+(\code{View(slowraker::pos_tags)}). The default value is all
+parts-of-speech that are verbs (e.g., \code{stop_pos = c("VB", "VBD",
+"VBG", "VBN", "VBP", "VBZ")}). Set \code{stop_pos = NULL} if you don't want
+a word's POS to matter during keyword extraction.}
 
 \item{word_min_char}{The minimum number of characters that a word must have
 to remain in the corpus. Words with fewer than \code{word_min_char}
@@ -36,8 +33,7 @@ that filtering words based on \code{word_min_char} happens before stemming,
 so you should not consider the length of a word's stem when choosing
 \code{word_min_char}.}
 
-\item{stem}{Do you want to stem the words in your documents before extracting
-keywords?}
+\item{stem}{Do you want to calculate the keyword's score based on its stem?}
 }
 \value{
 An object of class \code{rakelist}, which is just a list of data
@@ -58,30 +54,11 @@ An object of class \code{rakelist}, which is just a list of data
 }
 \description{
 A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
-algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for details on
-how RAKE works.
+algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for
+details on how RAKE works.
 }
 \examples{
-slowrake(txt = dog_pubs$title[1])
+slowrake(txt = "some text that has great keywords.")
 
 slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
-
-# Only consider words that are plural nouns (NNS) when creating candidate
-# keywords:
-slowrake(txt = c("dogs are the best, don't you think?",
-                 "some people think dogs are the best, but i love my cat."),
-         filter_pos = pos_tags$tag[!(pos_tags$tag == "NNS")])
-
-# ...Now only consider singular nouns:
-slowrake(txt = c("dogs are the best, don't you think?",
-                 "some people think dogs are the best, but i love my cat."),
-         filter_pos = pos_tags$tag[!(pos_tags$tag == "NN")])
-
-# Removing "dogs" in this txt means we no longer have any candidate keywords:
-slowrake(txt = "dogs are the best, don't you think?",
-         stop_words = "dogs")
-
-# Don't filter words on POS or based on membership in stop_words:
-slowrake(txt = c("hi there. dogs are the best, don't you think?"),
-         filter_pos = NULL, stop_words = NULL)
 }

@@ -58,8 +58,8 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 #' Slow RAKE
 #'
 #' A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
-#' algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for details on
-#' how RAKE works.
+#' algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for
+#' details on how RAKE works.
 #'
 #' @param txt A character vector, where each element of the vector contains the
 #'   text for one document.
@@ -82,8 +82,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 #'   that filtering words based on \code{word_min_char} happens before stemming,
 #'   so you should not consider the length of a word's stem when choosing
 #'   \code{word_min_char}.
-#' @param stem Do you want to stem the words in your documents before extracting
-#'   keywords?
+#' @param stem Do you want to calculate the keyword's score based on its stem?
 #' @return An object of class \code{rakelist}, which is just a list of data
 #'   frames (one data frame per document/element of \code{txt}). Each data frame
 #'   will have the following columns:
@@ -103,28 +102,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 #' @export
 #'
 #' @examples
-#' slowrake(txt = dog_pubs$title[1])
+#' slowrake(txt = "some text that has great keywords.")
 #'
 #' slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
-#'
-#' # Only consider words that are plural nouns (NNS) when creating candidate
-#' # keywords:
-#' slowrake(txt = c("dogs are the best, don't you think?",
-#'                  "some people think dogs are the best, but i love my cat."),
-#'          filter_pos = pos_tags$tag[!(pos_tags$tag == "NNS")])
-#'
-#' # ...Now only consider singular nouns:
-#' slowrake(txt = c("dogs are the best, don't you think?",
-#'                  "some people think dogs are the best, but i love my cat."),
-#'          filter_pos = pos_tags$tag[!(pos_tags$tag == "NN")])
-#'
-#' # Removing "dogs" in this txt means we no longer have any candidate keywords:
-#' slowrake(txt = "dogs are the best, don't you think?",
-#'          stop_words = "dogs")
-#'
-#' # Don't filter words on POS or based on membership in stop_words:
-#' slowrake(txt = c("hi there. dogs are the best, don't you think?"),
-#'          filter_pos = NULL, stop_words = NULL)
 slowrake <- function(txt, stop_words = smart_words,
                      stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"),
                      word_min_char = 3, stem = TRUE) {
