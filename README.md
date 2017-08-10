@@ -9,8 +9,7 @@ Installation
 ------------
 
 ``` r
-if (!("devtools" %in% installed.packages()[,1]))
-  install.packages("devtools")
+if (!require(devtools)) install.packages("devtools")
 
 devtools::install_github("crew102/slowraker")
 ```
@@ -37,11 +36,11 @@ rakelist
 #>   ..$ freq   :1 1 ...
 #>   ..$ score  :4 4 ...
 #>   ..$ stem   :"assist dog" ...
-#>  $ :'data.frame':    7 obs. of  4 variables:
-#>   ..$ keyword:"guide dog owners" ...
+#>  $ :'data.frame':    6 obs. of  4 variables:
+#>   ..$ keyword:"guide dog owners perspectives" ...
 #>   ..$ freq   :1 1 ...
-#>   ..$ score  :7.5 4.5 ...
-#>   ..$ stem   :"guid dog owner" ...
+#>   ..$ score  :13 ...
+#>   ..$ stem   :"guid dog owner perspect" ...
 #> #...With 3 more data frames.
 ```
 
@@ -50,10 +49,10 @@ We can bind these data frames together using `rbind_rakelist()`:
 ``` r
 rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 head(rakedf, 5)
-#>                         doc_id             keyword freq score           stem
-#> 1 10.1371/journal.pone.0132820     assistance dogs    1   4.0     assist dog
-#> 2 10.1371/journal.pone.0132820 identification tags    1   4.0    identif tag
-#> 3 10.1371/journal.pone.0132820          california    1   1.0     california
-#> 4 10.1371/journal.pone.0132820       registrations    1   1.0        registr
-#> 5 10.1371/journal.pone.0176018    guide dog owners    1   7.5 guid dog owner
+#>                         doc_id                       keyword freq    score                    stem
+#> 1 10.1371/journal.pone.0132820               assistance dogs    1  4.00000              assist dog
+#> 2 10.1371/journal.pone.0132820           identification tags    1  4.00000             identif tag
+#> 3 10.1371/journal.pone.0132820                    california    1  1.00000              california
+#> 4 10.1371/journal.pone.0132820                 registrations    1  1.00000                 registr
+#> 5 10.1371/journal.pone.0176018 guide dog owners perspectives    1 13.33333 guid dog owner perspect
 ```

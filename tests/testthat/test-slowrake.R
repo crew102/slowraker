@@ -17,7 +17,7 @@ test_that("slowrake works for txt without alpha chars", {
   expect_true(is.na(unlist(out)))
 })
 
-test_that("slowrake works when all txt is removed after pos filter", {
+test_that("slowrake works when all txt is removed after pos words stopped", {
   out <- slowrake("walking")
   expect_true(is.na(unlist(out)))
 })
@@ -27,9 +27,9 @@ test_that("slowrake removes stopwords", {
   expect_true(is.na(unlist(out)))
 })
 
-test_that("pos filtering works as expected", {
-  out1 <- slowrake("dogs are awesome", filter_pos = "NNS")
-  out2 <- slowrake("dogs found food", filter_pos = NULL)
+test_that("pos stopping works as expected", {
+  out1 <- slowrake("dogs are awesome", stop_pos = "NNS")
+  out2 <- slowrake("dogs found food", stop_pos = NULL)
   expect_true(
     nrow(out2[[1]]) == 1 && nrow(out2[[1]]) == 1
   )

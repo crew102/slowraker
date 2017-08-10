@@ -15,10 +15,10 @@ get_pos_tags <- function(txt) {
   )
 }
 
-filter_pos_tags <- function(pos_word_df, filter_pos) {
-  in_filter_pos <- pos_word_df$pos %in% filter_pos
+stop_pos_tags <- function(pos_word_df, stop_pos) {
+  in_stop_pos <- pos_word_df$pos %in% stop_pos
   # Replace unwanted words (based on POS) with a phrase delim (.):
-  pos_word_df$word[in_filter_pos] <- "."
+  pos_word_df$word[in_stop_pos] <- "."
   paste(pos_word_df$word, collapse = " ")
 }
 

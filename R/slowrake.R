@@ -4,7 +4,7 @@
 # The comments refer to tokens as "words" (e.g., "hi" is a word) and refer to
 # contiguous sequences of tokens (i.e., phrases) as "keywords" (e.g., "hi there"
 # could be a keyword).
-slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
+slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 
   # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
@@ -14,9 +14,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
     return(NA)
 
   # Remove words based on their POS
-  if (!is.null(filter_pos)) {
+  if (!is.null(stop_pos)) {
     pos_word_df <- get_pos_tags(txt = txt)
-    txt <- filter_pos_tags(pos_word_df = pos_word_df, filter_pos = filter_pos)
+    txt <- stop_pos_tags(pos_word_df = pos_word_df, stop_pos = stop_pos)
   }
 
   txt <- tolower(txt)
@@ -68,17 +68,14 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
 #'   words (equivalent to
 #'   \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')})
 #'   . A value of \code{NULL} indicates that no stop words will be removed.
-#' @param filter_pos The parts-of-speech (POS) that should be filtered from
-#'   the documents prior to keyword extraction. In other words, if you include
-#'   a part-of-speech in \code{filter_pos}, then all words that are assigned to
-#'   that POS will be removed prior to the RAKE algorithm. \code{filter_pos}
-#'   should be a vector of POS tags. To see all POS tags along with their
-#'   definitions (i.e., the POS that the tag denotes),see the
-#'   \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}). The
-#'   default is to remove all parts-of-speech that are verbs (e.g.,
-#'   \code{filter_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ")}). Set
-#'   \code{filter_pos = NULL} if you don't want to remove any words based on
-#'   its part-of-speech.
+#' @param stop_pos Any words that have a part-of-speech (POS) that appears in
+#'   \code{stop_pos} will be considered a stop word. \code{stop_pos} should be a
+#'   vector of POS tags. To see all POS tags along with their definitions (i.e.,
+#'   the POS that the tag denotes), see the \code{\link{pos_tags}} data frame
+#'   (\code{View(slowraker::pos_tags)}). The default value is all
+#'   parts-of-speech that are verbs (e.g., \code{stop_pos = c("VB", "VBD",
+#'   "VBG", "VBN", "VBP", "VBZ")}). Set \code{stop_pos = NULL} if you don't want
+#'   a word's POS to matter during keyword extraction.
 #' @param word_min_char The minimum number of characters that a word must have
 #'   to remain in the corpus. Words with fewer than \code{word_min_char}
 #'   characters will be removed before the RAKE algorithm is applied. Also note
@@ -129,7 +126,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, filter_pos) {
 #' slowrake(txt = c("hi there. dogs are the best, don't you think?"),
 #'          filter_pos = NULL, stop_words = NULL)
 slowrake <- function(txt, stop_words = smart_words,
-                     filter_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"),
+                     stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"),
                      word_min_char = 3, stem = TRUE) {
 
   num_docs <- length(txt)
@@ -139,7 +136,7 @@ slowrake <- function(txt, stop_words = smart_words,
   for (i in seq_along(txt)) {
     all_out[[i]] <- slowrake_atomic(txt = txt[i], stop_words = stop_words,
                                     word_min_char = word_min_char, stem = stem,
-                                    filter_pos = filter_pos)
+                                    stop_pos = stop_pos)
     utils::setTxtProgressBar(prog_bar, i)
   }
 
