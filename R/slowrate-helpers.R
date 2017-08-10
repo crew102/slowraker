@@ -57,25 +57,15 @@ gen_word_cnts <- function(cand_words) {
   as.matrix(table(unq_wrds))
 }
 
-gen_non_diag_deg <- function(wrd_cnts, cand_words) {
-  # The non-diagonal component of a word's degree is the number of times that
-  # the word co-occurs with another distinct word...To get this value, we count
-  # the number of keywords the word is in and weight this by the keyword's
-  # length, then substract 1.
-  # what about case where word occurs twice "sum sum"
-  temp_score1 <- lapply(rownames(wrd_cnts), function(x)
-    unlist(lapply(cand_words, function(q) x %in% q)))
-  kr <- vapply(cand_words, length, numeric(1)) - 1
-  vapply(temp_score1, function(x) sum(kr[x]), numeric(1))
+gen_degree <- function(wrd_cnts, cand_words) {
+  temp_score1 <- sapply(rownames(wrd_cnts), function(x)
+    sum(sapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0))))
+  temp_score1 + wrd_cnts[, 1]
 }
 
-calc_word_scores <- function(wrd_cnts, non_diag_deg) {
-  # Degree can now be found by adding non-diagonal component of degree to
-  # the diagonal component (diagonal component = a word's frequency)
-  mat <- cbind(non_diag_deg, wrd_cnts)
-  mat[, 1] <- mat[, 1] + mat[, 2] # Add non-diag to diag
+calc_word_scores <- function(wrd_cnts, degree) {
   structure(
-    mat[, 1] / mat[, 2], # degree / freq
+    degree / wrd_cnts, # degree / freq
     names = rownames(wrd_cnts)
   )
 }
@@ -83,13 +73,11 @@ calc_word_scores <- function(wrd_cnts, non_diag_deg) {
 calc_keyword_scores <- function(cand_words) {
   # Get word counts for all distinct words
   wrd_cnts <- gen_word_cnts(cand_words = cand_words)
-  # Get the non-diagonal component of a word's degree score
-  non_diag_deg <- gen_non_diag_deg(wrd_cnts = wrd_cnts, cand_words = cand_words)
+  # Get word's degree score
+  degree <- gen_degree(wrd_cnts = wrd_cnts, cand_words = cand_words)
 
   # Get each word's score as per degree/frequency
-  word_scores <- calc_word_scores(wrd_cnts = wrd_cnts,
-                                  non_diag_deg = non_diag_deg)
-
+  word_scores <- calc_word_scores(wrd_cnts = wrd_cnts, degree = degree)
   # Add word scores for the words in each (non-distinct) keyword, to get
   # keyword scores
   unlist(lapply(cand_words, function(x) sum(word_scores[x])))
