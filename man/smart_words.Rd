@@ -3,7 +3,7 @@
 \docType{data}
 \name{smart_words}
 \alias{smart_words}
-\title{SMART stopwords}
+\title{SMART stop words}
 \format{An object of class \code{character} of length 571.}
 \usage{
 smart_words
