@@ -31,7 +31,7 @@ There is one main function in the `slowraker` package, `slowrake()`. `slowrake()
 library(slowraker)
 
 data("dog_pubs")
-rakelist <- slowrake(txt = dog_pubs$title[1:5])
+rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
 ```{r, eval = TRUE, results = 'hide', echo = FALSE}
@@ -41,7 +41,7 @@ library(slowraker)
 options(width = 100)
 
 data("dog_pubs")
-rakelist <- slowrake(txt = dog_pubs$title[1:5])
+rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
 `slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document:
