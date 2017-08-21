@@ -19,7 +19,9 @@ Imports:
     openNLP,
     utils
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 SystemRequirements:
     Java (>= 5.0)
 RoxygenNote: 6.0.1.9000
