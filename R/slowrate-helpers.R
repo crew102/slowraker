@@ -58,8 +58,11 @@ gen_word_cnts <- function(cand_words) {
 }
 
 gen_degree <- function(wrd_cnts, cand_words) {
-  temp_score1 <- sapply(rownames(wrd_cnts), function(x)
-    sum(sapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0))))
+  temp_score1 <- vapply(rownames(wrd_cnts), function(x) {
+    sum(vapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0),
+               numeric(1)))
+  }, numeric(1))
+
   temp_score1 + wrd_cnts[, 1]
 }
 
