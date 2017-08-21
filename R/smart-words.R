@@ -1,4 +1,4 @@
-#' SMART stopwords
+#' SMART stop words
 #'
 #' A vector containing the stop words taken from the SMART information retrieval
 #' system. See \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')}

@@ -22,7 +22,7 @@ test_that("slowrake works when all txt is removed after pos words stopped", {
   expect_true(is.na(unlist(out)))
 })
 
-test_that("slowrake removes stopwords", {
+test_that("slowrake removes stop words", {
   out <- slowrake("dogs", stop_words = "dogs")
   expect_true(is.na(unlist(out)))
 })
