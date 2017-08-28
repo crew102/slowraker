@@ -25,7 +25,7 @@ devtools::install_github("crew102/slowraker")
 
 ## Basic usage
 
-There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of text using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
 
 ```{r, eval = FALSE}
 library(slowraker)
@@ -38,21 +38,25 @@ rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 # Note, we have to split the README.Rmd up like this so that it doesn't print 
 # out the progress bar.
 library(slowraker)
-options(width = 100)
+options(width = 100, digits = 2)
 
 data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-`slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document:
+`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for the corresponding document:
 
 ```{r}
 rakelist
 ```
 
-We can bind these data frames together using `rbind_rakelist()`:
+You can bind these data frames together using `rbind_rakelist()`:
 
 ```{r}
 rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 head(rakedf, 5)
 ```
+
+## Learning more
+
+You can learn how RAKE works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).
