@@ -17,7 +17,7 @@ devtools::install_github("crew102/slowraker")
 Basic usage
 -----------
 
-There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of text using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
 
 ``` r
 library(slowraker)
@@ -26,7 +26,7 @@ data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-`slowrake()` outputs a list of data frames, with each data frame containing the keywords that were extracted from a document:
+`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for the corresponding document:
 
 ``` r
 rakelist
@@ -44,17 +44,17 @@ rakelist
 #> #...With 3 more data frames.
 ```
 
-We can bind these data frames together using `rbind_rakelist()`:
+You can bind these data frames together using `rbind_rakelist()`:
 
 ``` r
 rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 head(rakedf, 5)
-#>                         doc_id                            keyword freq     score
-#> 1 10.1371/journal.pone.0132820 assistance dog identification tags    1 10.833333
-#> 2 10.1371/journal.pone.0132820          animal control facilities    1  9.000000
-#> 3 10.1371/journal.pone.0132820          emotional support animals    1  9.000000
-#> 4 10.1371/journal.pone.0132820                   small body sizes    1  9.000000
-#> 5 10.1371/journal.pone.0132820       seemingly inappropriate dogs    1  7.916667
+#>                         doc_id                            keyword freq score
+#> 1 10.1371/journal.pone.0132820 assistance dog identification tags    1  10.8
+#> 2 10.1371/journal.pone.0132820          animal control facilities    1   9.0
+#> 3 10.1371/journal.pone.0132820          emotional support animals    1   9.0
+#> 4 10.1371/journal.pone.0132820                   small body sizes    1   9.0
+#> 5 10.1371/journal.pone.0132820       seemingly inappropriate dogs    1   7.9
 #>                       stem
 #> 1   assist dog identif tag
 #> 2       anim control facil
@@ -62,3 +62,8 @@ head(rakedf, 5)
 #> 4          small bodi size
 #> 5 seemingli inappropri dog
 ```
+
+Learning more
+-------------
+
+You can learn how RAKE works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).

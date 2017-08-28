@@ -7,7 +7,7 @@
 rbind_rakelist(rakelist, doc_id = NULL)
 }
 \arguments{
-\item{rakelist}{A object of class \code{rakelist}, which you create by
+\item{rakelist}{An object of class \code{rakelist}, which you create by
 calling \code{\link{slowrake}}.}
 
 \item{doc_id}{An optional vector of document IDs, which should be the same

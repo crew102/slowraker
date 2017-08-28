@@ -17,7 +17,7 @@ words (equivalent to
 \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')})
 . A value of \code{NULL} indicates that no stop words will be removed.}
 
-\item{stop_pos}{Any words that have a part-of-speech (POS) that appears in
+\item{stop_pos}{All words that have a part-of-speech (POS) that appears in
 \code{stop_pos} will be considered a stop word. \code{stop_pos} should be a
 vector of POS tags. To see all POS tags along with their definitions (i.e.,
 the POS that the tag denotes), see the \code{\link{pos_tags}} data frame
@@ -28,7 +28,7 @@ a word's POS to matter during keyword extraction.}
 
 \item{word_min_char}{The minimum number of characters that a word must have
 to remain in the corpus. Words with fewer than \code{word_min_char}
-characters will be removed before the RAKE algorithm is applied. Also note
+characters will be removed before the RAKE algorithm is applied. Note
 that filtering words based on \code{word_min_char} happens before stemming,
 so you should not consider the length of a word's stem when choosing
 \code{word_min_char}.}
@@ -41,13 +41,13 @@ An object of class \code{rakelist}, which is just a list of data
   will have the following columns:
   \describe{
     \item{keyword}{A keyword that was identified by RAKE.}
-    \item{freq}{The number of times the keyword appears in the document}
+    \item{freq}{The number of times the keyword appears in the document.}
     \item{score}{The keyword's score, as per the RAKE algorithm. Keywords
-    with higher scores are considered to be more higher quality, as compared
+    with higher scores are considered to be higher quality, as compared
     to those with lower scores.}
-    \item{stem}{If you specified \code{stem = TRUE}, you will also get the
+    \item{stem}{If you specified \code{stem = TRUE}, you will get the
     stemmed versions of the keywords in this column. When you choose stemming,
-    the keyword's score (\code{score}) will be based off of its stem, but the
+    the keyword's score (\code{score}) will be based off its stem, but the
     reported number of times that the keyword appears (i.e., \code{freq})
     will still be based off of the raw, unstemmed version of the keyword.}
   }
@@ -55,10 +55,11 @@ An object of class \code{rakelist}, which is just a list of data
 \description{
 A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
 algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for
-details on how RAKE works.
+details on how RAKE works or read the "Getting started" vignette (
+\code{vignette("getting-started", package = "slowraker")}).
 }
 \examples{
-slowrake(txt = "some text that has great keywords.")
+slowrake(txt = "some text that has great keywords")
 
 slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
 }
