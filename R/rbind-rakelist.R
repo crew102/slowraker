@@ -6,7 +6,7 @@
 #'   length as \code{rakelist}. These IDs will be added to the resulting data
 #'   frame.
 #'
-#' @return A single data frame which contains the documents' keywords. The
+#' @return A single data frame which contains all documents' keywords. The
 #'   \code{doc_id} column in this data frame denotes which document a keyword
 #'   was found in.
 #'
@@ -17,6 +17,7 @@
 #'
 #' # Without specifying doc_id:
 #' rbind_rakelist(rakelist = rakelist)
+#'
 #' # With specifying doc_id:
 #' rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2])
 rbind_rakelist <- function(rakelist, doc_id = NULL) {
@@ -27,7 +28,7 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
     doc_id <- as.character(seq_along(rakelist))
   } else {
     asrt(length(rakelist) == length(unique(doc_id)), "doc_id must have the ",
-         "the same number of distinct elements as rakelist")
+         "same number of distinct elements as your rakelist")
   }
 
   numeric_ids <- is.numeric(doc_id)

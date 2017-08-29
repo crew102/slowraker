@@ -42,12 +42,12 @@ library(slowraker)
 txt <- "Compatibility of systems of linear constraints over the set of natural numbers. Criteria of compatibility of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating sets of solutions for all types of systems are given. These criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can be used in solving all the considered types of systems and systems of mixed types."
 ```
 
-Using the default settings:
+Use the default settings:
 ```{r}
 slowrake(txt = txt)[[1]]
 ```
 
-With the default settings, each word is stemmed before its score is calculated. You can tell `slowrake()` not to stem the words before scoring them:
+Don't stem the keywords before scoring them: 
 ```{r}
 slowrake(txt = txt, stem = FALSE)[[1]]
 ```
@@ -62,9 +62,10 @@ Don't use a word's part-of-speech to determine if it is a stop word:
 slowrake(txt = txt, stop_pos = NULL)[[1]]
 ```
 
-Only consider words that are plural nouns (POS tag = NNS) when creating candidate keywords:
+Consider words that aren't nouns to be stop words:
 ```{r}
-slowrake(txt = txt, stop_pos = pos_tags$tag[!(pos_tags$tag == "NNS")])[[1]]
+slowrake(txt = txt, stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)])[[1]]
+```
 
 Score keywords based on their frequency, not their RAKE score:
 ```{r}
@@ -82,7 +83,7 @@ slowrake(txt = dog_pubs$abstract[1:10])
 
 ### Why is it called *slow*raker?
 
-`slowraker` is written almost entirely in R. I plan on writing a pure Java version of the package soon (which will be called `rapidraker`). Hopefully that version will be faster than `slowraker`. 
+`slowrake()` is written entirely in R, so it should be slower than the Java version of the package that I plan on writing soon (which will be called `rapidraker`). Note, if you want to speed up the `slowrake()`, just turn off the feature that filters words based on their POS (i.e., set `stop_pos = NULL`).
 
 ### It seems like keywords that contain several words are always given a high score. What's up with that?
 

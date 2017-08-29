@@ -20,7 +20,7 @@ raw_dog_pubs <- data.frame(
   stringsAsFactors = FALSE, row.names = NULL
 )
 
-# Section headers appear abut words in abstracts (e.g., "BackgroundHi there").
+# Section headers abut words in abstracts (e.g., "BackgroundHi there").
 # We'll remove cases of this so it doesn't influence keyword extraction.
 dog_pubs <-
   raw_dog_pubs %>%

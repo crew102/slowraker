@@ -4,7 +4,7 @@ print.rakelist <- function(x, ...) {
   up_ind <- ifelse(num_docs == 1, 1, 2)
 
   cat(
-    "# A rakelist containing", as.character(num_docs), "data frames:\n"
+    "\n# A rakelist containing", as.character(num_docs), "data frames:\n"
   )
 
   utils::str(x[1:up_ind], vec.len = 1, max.level = 2, give.attr = FALSE,
