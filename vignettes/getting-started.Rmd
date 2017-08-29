@@ -65,6 +65,12 @@ slowrake(txt = txt, stop_pos = NULL)[[1]]
 Only consider words that are plural nouns (POS tag = NNS) when creating candidate keywords:
 ```{r}
 slowrake(txt = txt, stop_pos = pos_tags$tag[!(pos_tags$tag == "NNS")])[[1]]
+
+Score keywords based on their frequency, not their RAKE score:
+```{r}
+res <- slowrake(txt = txt)[[1]]
+res2 <- aggregate(freq ~ keyword + stem, data = res, FUN = sum)
+res2[order(res2$freq, decreasing = TRUE), ]
 ```
 
 Run RAKE on a vector of documents instead of just one document:
