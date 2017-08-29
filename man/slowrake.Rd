@@ -19,21 +19,21 @@ words (equivalent to
 
 \item{stop_pos}{All words that have a part-of-speech (POS) that appears in
 \code{stop_pos} will be considered a stop word. \code{stop_pos} should be a
-vector of POS tags. To see all POS tags along with their definitions (i.e.,
-the POS that the tag denotes), see the \code{\link{pos_tags}} data frame
-(\code{View(slowraker::pos_tags)}). The default value is all
-parts-of-speech that are verbs (e.g., \code{stop_pos = c("VB", "VBD",
-"VBG", "VBN", "VBP", "VBZ")}). Set \code{stop_pos = NULL} if you don't want
-a word's POS to matter during keyword extraction.}
+vector of POS tags. To see all POS tags along with their definitions, see
+the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}).
+The default value is to remove all words that have a verb-based
+part-of-speech (i.e., \code{stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP",
+"VBZ")}). Set \code{stop_pos = NULL} if you don't want a word's POS to
+matter during keyword extraction.}
 
 \item{word_min_char}{The minimum number of characters that a word must have
 to remain in the corpus. Words with fewer than \code{word_min_char}
 characters will be removed before the RAKE algorithm is applied. Note
-that filtering words based on \code{word_min_char} happens before stemming,
-so you should not consider the length of a word's stem when choosing
-\code{word_min_char}.}
+that removing words based on \code{word_min_char} happens before stemming,
+so you should consider the full length of the word and not the length of
+its stem when choosing \code{word_min_char}.}
 
-\item{stem}{Do you want to calculate the keyword's score based on its stem?}
+\item{stem}{Do you want to stem the words before running RAKE?}
 }
 \value{
 An object of class \code{rakelist}, which is just a list of data
@@ -43,13 +43,14 @@ An object of class \code{rakelist}, which is just a list of data
     \item{keyword}{A keyword that was identified by RAKE.}
     \item{freq}{The number of times the keyword appears in the document.}
     \item{score}{The keyword's score, as per the RAKE algorithm. Keywords
-    with higher scores are considered to be higher quality, as compared
-    to those with lower scores.}
+    with higher scores are considered to be higher quality that those with
+    lower scores.}
     \item{stem}{If you specified \code{stem = TRUE}, you will get the
     stemmed versions of the keywords in this column. When you choose stemming,
-    the keyword's score (\code{score}) will be based off its stem, but the
-    reported number of times that the keyword appears (i.e., \code{freq})
-    will still be based off of the raw, unstemmed version of the keyword.}
+    the keyword's score (the \code{score} column) will be based off its stem,
+    but the reported number of times that the keyword appears (i.e., the
+    \code{freq} column) will still be based off of the raw, unstemmed version
+    of the keyword.}
   }
 }
 \description{

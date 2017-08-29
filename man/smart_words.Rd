@@ -9,8 +9,8 @@
 smart_words
 }
 \description{
-A vector containing the stop words taken from the SMART information retrieval
-system. See \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')}
+A vector containing the SMART information retrieval system stop words. See
+\href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')}
 for more details.
 }
 \keyword{datasets}

@@ -15,7 +15,7 @@ length as \code{rakelist}. These IDs will be added to the resulting data
 frame.}
 }
 \value{
-A single data frame which contains the documents' keywords. The
+A single data frame which contains all documents' keywords. The
   \code{doc_id} column in this data frame denotes which document a keyword
   was found in.
 }
@@ -27,6 +27,7 @@ rakelist <- slowrake(txt = dog_pubs$abstract[1:2])
 
 # Without specifying doc_id:
 rbind_rakelist(rakelist = rakelist)
+
 # With specifying doc_id:
 rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2])
 }

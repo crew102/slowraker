@@ -16,6 +16,6 @@ dog_pubs
 \description{
 A data frame containing the titles and abstracts of PLOS publications related
 to dogs. The purpose of this data frame is to provide an example of some text
-(the publications' abstracts) for which keywords can be extracted.)
+(the publications' abstracts) to extract keywords from.
 }
 \keyword{datasets}
