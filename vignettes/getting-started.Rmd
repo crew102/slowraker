@@ -85,6 +85,22 @@ slowrake(txt = dog_pubs$abstract[1:10])
 
 `slowrake()` is written entirely in R, so it will probably be slower than the Java version of the package that I plan on writing in the near future (which will be called `rapidraker`). Note, if you want to speed up `slowrake()`, just turn off the feature that filters words based on their POS (i.e., set `stop_pos = NULL`).
 
+### `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How can I fix this?
+
+This error happens when Java (which is used for the POS tagging) has run out of memory. Try allocating more memory to your JVM with:
+
+```r
+options(java.parameters = "-Xmx1024m")
+```
+
+To quote from [XLConnect](https://cran.r-project.org/web/packages/XLConnect/vignettes/XLConnect.pdf):
+
+> [java.parameters] are evaluated exactly once per R session when the JVM is initialized - this is usually once you load the first package that uses Java support, so you should do this as early as possible. 
+
+Also note that:
+
+> The upper limit of the `Xmx` parameter is system dependent - most prominently, 32bit Windows will fail to work with anything much larger than 1500m, and it is usually a bad idea to set `Xmx` larger than your physical memory size because garbage collection and virtual memory do not play well together.
+
 ### It seems like keywords that contain several words are always given a high score. What's up with that?
 
 Each keyword's score is the sum of the scores of its member words. So a keyword like "dog leash" will always have a higher score than keywords "dog" or "leash." You can try to filter out these long keywords by using the `freq` column to filter out all keywords that appear fewer than x times in each document.
