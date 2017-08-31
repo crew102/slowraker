@@ -52,15 +52,17 @@ filter_words <- function(cand_words, word_min_char) {
 
 gen_word_cnts <- function(cand_words) {
   # Get a list of unique words in each keyword so we don't double count (e.g.,
-  # don't double count "vector" keyword "vector times vector").
+  # don't double count "vector" in "vector times vector").
   unq_wrds <- unlist(lapply(cand_words, unique))
   as.matrix(table(unq_wrds))
 }
 
 gen_degree <- function(wrd_cnts, cand_words) {
   temp_score1 <- vapply(rownames(wrd_cnts), function(x) {
-    sum(vapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0),
-               numeric(1)))
+    sum(
+      vapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0),
+             numeric(1))
+    )
   }, numeric(1))
 
   temp_score1 + wrd_cnts[, 1]

@@ -17,7 +17,7 @@ test_that("slowrake works for txt without alpha chars", {
   expect_true(is.na(unlist(out)))
 })
 
-test_that("slowrake works when all txt is removed after pos words stopped", {
+test_that("slowrake works when all txt is removed based on POS tags", {
   out <- slowrake("walking")
   expect_true(is.na(unlist(out)))
 })

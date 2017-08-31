@@ -16,8 +16,7 @@ frame.}
 }
 \value{
 A single data frame which contains all documents' keywords. The
-  \code{doc_id} column in this data frame denotes which document a keyword
-  was found in.
+  \code{doc_id} column tells you which document a keyword was found in.
 }
 \description{
 rbind a rakelist

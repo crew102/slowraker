@@ -15,16 +15,16 @@ text for one document.}
 documents. The default value (\code{smart_words}) contains the 'SMART' stop
 words (equivalent to
 \href{https://rdrr.io/rforge/tm/man/stopwords.html}{tm::stopwords('SMART')})
-. A value of \code{NULL} indicates that no stop words will be removed.}
+. Set \code{stop_words = NULL} if you don't want to remove stop words.}
 
 \item{stop_pos}{All words that have a part-of-speech (POS) that appears in
 \code{stop_pos} will be considered a stop word. \code{stop_pos} should be a
-vector of POS tags. To see all POS tags along with their definitions, see
-the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}).
+vector of POS tags. All possible POS tags along with their definitions are
+in the \code{\link{pos_tags}} data frame (\code{View(slowraker::pos_tags)}).
 The default value is to remove all words that have a verb-based
-part-of-speech (i.e., \code{stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP",
-"VBZ")}). Set \code{stop_pos = NULL} if you don't want a word's POS to
-matter during keyword extraction.}
+POS (i.e., \code{stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ")}).
+Set \code{stop_pos = NULL} if you don't want a word's POS to matter during
+keyword extraction.}
 
 \item{word_min_char}{The minimum number of characters that a word must have
 to remain in the corpus. Words with fewer than \code{word_min_char}
@@ -37,20 +37,19 @@ its stem when choosing \code{word_min_char}.}
 }
 \value{
 An object of class \code{rakelist}, which is just a list of data
-  frames (one data frame per document/element of \code{txt}). Each data frame
+  frames (one data frame for each element of \code{txt}). Each data frame
   will have the following columns:
   \describe{
     \item{keyword}{A keyword that was identified by RAKE.}
     \item{freq}{The number of times the keyword appears in the document.}
     \item{score}{The keyword's score, as per the RAKE algorithm. Keywords
-    with higher scores are considered to be higher quality that those with
+    with higher scores are considered to be higher quality than those with
     lower scores.}
     \item{stem}{If you specified \code{stem = TRUE}, you will get the
     stemmed versions of the keywords in this column. When you choose stemming,
-    the keyword's score (the \code{score} column) will be based off its stem,
-    but the reported number of times that the keyword appears (i.e., the
-    \code{freq} column) will still be based off of the raw, unstemmed version
-    of the keyword.}
+    the keyword's score (\code{score}) will be based off its stem,
+    but the reported number of times that the keyword appears (\code{freq})
+    will still be based off of the raw, unstemmed version of the keyword.}
   }
 }
 \description{

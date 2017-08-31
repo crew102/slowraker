@@ -26,7 +26,7 @@ data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for the corresponding document:
+`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for an element of `txt`:
 
 ``` r
 rakelist
@@ -66,4 +66,4 @@ head(rakedf, 5)
 Learning more
 -------------
 
-You can learn about how RAKE works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).
+You can learn about how the RAKE algorithm works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).

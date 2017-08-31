@@ -7,8 +7,7 @@
 #'   frame.
 #'
 #' @return A single data frame which contains all documents' keywords. The
-#'   \code{doc_id} column in this data frame denotes which document a keyword
-#'   was found in.
+#'   \code{doc_id} column tells you which document a keyword was found in.
 #'
 #' @export
 #'
@@ -32,8 +31,7 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
   }
 
   numeric_ids <- is.numeric(doc_id)
-  if (numeric_ids)
-    doc_id <- as.character(doc_id)
+  if (numeric_ids) doc_id <- as.character(doc_id)
 
   names(rakelist) <- doc_id
 
@@ -45,8 +43,7 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
   df <- do.call("rbind", rakelist)
   doc_id <- unlist(doc_ids_repped)
 
-  if (numeric_ids)
-    doc_id <- as.numeric(doc_id)
+  if (numeric_ids) doc_id <- as.numeric(doc_id)
 
   cbind(doc_id, df, stringsAsFactors = FALSE, row.names = NULL)
 }
