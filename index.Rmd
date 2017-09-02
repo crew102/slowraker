@@ -1,6 +1,6 @@
 ---
-output: github_document
 title: "slowraker"
+output: github_document
 ---
 
 ```{r, echo = FALSE, message = FALSE}
@@ -9,11 +9,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
-> A slow version of the Rapid Automatic Keyword Extraction (RAKE) algorithm
-
-[![Linux Build Status](https://travis-ci.org/crew102/slowraker.svg?branch=master)](https://travis-ci.org/crew102/slowraker) 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/2ycx1m182va333ye?svg=true)](https://ci.appveyor.com/project/crew102/slowraker)
 
 ## Installation
 
@@ -61,10 +56,13 @@ rakelist
 You can bind these data frames together using `rbind_rakelist()`:
 
 ```{r}
-rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
-head(rakedf, 5)
+rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 ```
 
 ## Learning more
 
-To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started"`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs"`).
+One the site you will find
+
+* A [getting started](articles/getting-started.html) vignette which explains how the RAKE algorithm works as well as the basics of `slowrake()`
+* A few example [applications](articles/applications.html)
+* Answers to [frequently asked questions](articles/faqs.html)

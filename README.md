@@ -8,6 +8,14 @@ slowraker
 Installation
 ------------
 
+You can get the stable version from CRAN:
+
+``` r
+install.packages("slowraker")
+```
+
+Or the development version from GitHub:
+
 ``` r
 if (!require(devtools)) install.packages("devtools")
 
@@ -30,6 +38,7 @@ rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 
 ``` r
 rakelist
+#> 
 #> # A rakelist containing 5 data frames:
 #>  $ :'data.frame':    61 obs. of  4 variables:
 #>   ..$ keyword:"assistance dog identification tags" ...
@@ -66,4 +75,4 @@ head(rakedf, 5)
 Learning more
 -------------
 
-You can learn about how the RAKE algorithm works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).
+To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started"`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs"`).

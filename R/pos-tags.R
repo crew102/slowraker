@@ -4,7 +4,7 @@
 #' \href{https://CRAN.R-project.org/package=openNLP}{openNLP}
 #' package. This list was taken from
 #' \href{http://martinschweinberger.de/docs/articles/PosTagR.pdf}{Part-Of-Speech
-#' Tagging with R}...\code{pos_tags} contains the following two columns:
+#' Tagging with R}. \code{pos_tags} contains the following two columns:
 #' \describe{
 #'   \item{tag}{The abbreviation for the part-of-speech (i.e., its tag)}
 #'   \item{description}{A short description of the part-of-speech}

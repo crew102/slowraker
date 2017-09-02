@@ -56,7 +56,7 @@ An object of class \code{rakelist}, which is just a list of data
 A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
 algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for
 details on how RAKE works or read the "Getting started" vignette (
-\code{vignette("getting-started", package = "slowraker")}).
+\code{vignette("getting-started")}).
 }
 \examples{
 slowrake(txt = "some text that has great keywords")

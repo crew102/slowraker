@@ -45,41 +45,40 @@ library(slowraker)
 txt <- "Compatibility of systems of linear constraints over the set of natural numbers. Criteria of compatibility of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating sets of solutions for all types of systems are given. These criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can be used in solving all the considered types of systems and systems of mixed types."
 ```
 
-Use the default settings:
+* Use the default settings:
 ```{r}
 slowrake(txt = txt)[[1]]
 ```
 
-Don't stem the keywords before scoring them: 
+* Don't stem the keywords before scoring them: 
 ```{r}
 slowrake(txt = txt, stem = FALSE)[[1]]
 ```
 
-Add the word "diophantine" to the default set of stop words (default set of stop words is `slowraker::smart_words`):
+* Add the word "diophantine" to the default set of stop words (default set of stop words is `slowraker::smart_words`):
 ```{r}
 slowrake(txt = txt, stop_words = c(smart_words, "diophantine"))[[1]]
 ```
 
-Don't use a word's part-of-speech to determine if it's a stop word:
+* Don't use a word's part-of-speech to determine if it's a stop word:
 ```{r}
 slowrake(txt = txt, stop_pos = NULL)[[1]]
 ```
 
-Consider words that aren't nouns to be stop words:
+* Consider words that aren't nouns to be stop words:
 ```{r}
 slowrake(txt = txt, stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)])[[1]]
 ```
 
-List the keywords that occur most frequently (`freq`):
+* List the keywords that occur most frequently (`freq`):
 ```{r}
 res <- slowrake(txt = txt)[[1]]
 res2 <- aggregate(freq ~ keyword + stem, data = res, FUN = sum)
 res2[order(res2$freq, decreasing = TRUE), ]
 ```
 
-Run RAKE on a vector of documents instead of just one document:
+* Run RAKE on a vector of documents instead of just one document:
 ```{r}
 slowrake(txt = dog_pubs$abstract[1:10])
 ```
-
 [^1]: Technically, the original version of RAKE allows some keywords to contain stop words, but `slowrake()` does not allow for this.

@@ -10,3 +10,8 @@
 ^makefile$
 ^data-raw$
 ^README.Rmd$
+^docs$
+^_pkgdown\.yml$
+^index\.Rmd$
+^inst/site$
+^pkgdown$
