@@ -26,26 +26,20 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
   )
 
   if (is.null(doc_id)) {
-    doc_id <- as.character(seq_along(rakelist))
+    doc_id <- seq_along(rakelist)
   } else {
-    asrt(length(rakelist) == length(unique(doc_id)), "doc_id must have the ",
-         "same number of distinct elements as your rakelist")
+    asrt(
+      length(rakelist) == length(doc_id),
+    "doc_id must have the same number of elements as your rakelist"
+    )
   }
 
-  numeric_ids <- is.numeric(doc_id)
-  if (numeric_ids) doc_id <- as.character(doc_id)
+  num_rows <- vapply(rakelist, function(x)
+    if (is.data.frame(x)) nrow(x) else 1, numeric(1))
 
-  names(rakelist) <- doc_id
-
-  doc_ids_repped <- lapply(doc_id, function(x) {
-    rws <- nrow(rakelist[[x]])
-    rep(x, ifelse(is.null(rws), 1, rws))
-  })
+  doc_id <- rep(doc_id, num_rows)
 
   df <- do.call("rbind", rakelist)
-  doc_id <- unlist(doc_ids_repped)
-
-  if (numeric_ids) doc_id <- as.numeric(doc_id)
 
   cbind(doc_id, df, stringsAsFactors = FALSE, row.names = NULL)
 }
