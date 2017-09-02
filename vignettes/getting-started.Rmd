@@ -25,13 +25,13 @@ options(digits = 2)
 
 The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) as a way to quickly extract keywords from documents. In short, the algorithm involves two steps:
 
-**1. Identify candidate keywords.** A candidate keyword is any set of contiguous words (i.e., any n-gram) which doesn't contain a phrase delimiter or a stop word.[^1]  A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
+**1. Identify candidate keywords.** A candidate keyword is any set of contiguous words (i.e., any n-gram) which doesn't contain a phrase delimiter or a stop word.[^1] A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
 
 > RAKE is based on our observation that keywords frequently contain multiple words but rarely contain standard punctuation or stop words, such as the function words *and*, *the*, and *of*, or other words with minimal lexical meaning
 
-In addition to using stop words and phrase delimiters to split text into keywords, you can also use a word's part-of-speech (POS). For example, most keywords don't contain verbs, so you may want to treat all verbs as if they are stop words. The original implementation of RAKE (as per Rose et al.) does not use a word's POS to determine if it should be a stop word, but `slowrake()` gives you this option.  
+In addition to using stop words and phrase delimiters to split text into keywords, you can also use a word's part-of-speech (POS). For example, most keywords don't contain verbs, so you may want to treat all verbs as if they are stop words. The original implementation of RAKE (as per Rose et al.) does not use a word's POS when creating the candidate keywords, but `slowrake()` gives you this option.  
 
-**2. Calculate each keyword's score.** A keyword's score (i.e., its degree of "keywordness") is the sum of its member word scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A word's score is equal to its degree/frequency, where degree is equal to the number of times that the word co-occurs with another word in a keyword, and frequency is the total number of times that the keyword occurs overall.
+**2. Calculate each keyword's score.** A keyword's score (i.e., its degree of "keywordness") is the sum of its member word scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A word's score is equal to its degree/frequency, where degree is defined as the times that the word co-occurs with another word in a keyword, and frequency is just the total number of times that the keyword occurs overall.
 
 See [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) for more details on how RAKE works. 
 
@@ -60,7 +60,7 @@ Add the word "diophantine" to the default set of stop words (default set of stop
 slowrake(txt = txt, stop_words = c(smart_words, "diophantine"))[[1]]
 ```
 
-Don't use a word's part-of-speech to determine if it is a stop word:
+Don't use a word's part-of-speech to determine if it's a stop word:
 ```{r}
 slowrake(txt = txt, stop_pos = NULL)[[1]]
 ```
@@ -70,7 +70,7 @@ Consider words that aren't nouns to be stop words:
 slowrake(txt = txt, stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)])[[1]]
 ```
 
-Score keywords based on their frequency, not their RAKE score:
+List the keywords that occur most frequently (`freq`):
 ```{r}
 res <- slowrake(txt = txt)[[1]]
 res2 <- aggregate(freq ~ keyword + stem, data = res, FUN = sum)
@@ -82,15 +82,15 @@ Run RAKE on a vector of documents instead of just one document:
 slowrake(txt = dog_pubs$abstract[1:10])
 ```
 
-## FAQ
+## FAQs
 
 ### Why is it called *slow*raker?
 
-`slowrake()` is written entirely in R, so it will probably be slower than the Java version of the package that I plan on writing in the near future (which will be called `rapidraker`). Note, if you want to speed up `slowrake()`, just turn off the feature that filters words based on their POS (i.e., set `stop_pos = NULL`).
+`slowrake()` is written entirely in R, so it will probably be slower than the Java version of RAKE that I plan on writing in the near future (see the `rapidraker` R package for updates). You can speed up `slowrake()` by ignoring the words' part-of-speech (POS) when creating candidate keywords (i.e., set `stop_pos = NULL`).
 
 ### `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How can I fix this?
 
-This error happens when Java (which is used for the POS tagging) has run out of memory. Try allocating more memory to your JVM with:
+`slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, thus causing the error. To fix this, try giving Java more memory:
 
 ```r
 options(java.parameters = "-Xmx1024m")
@@ -104,12 +104,14 @@ Also note that:
 
 > The upper limit of the `Xmx` parameter is system dependent - most prominently, 32bit Windows will fail to work with anything much larger than 1500m, and it is usually a bad idea to set `Xmx` larger than your physical memory size because garbage collection and virtual memory do not play well together.
 
-### It seems like keywords that contain several words are always given a high score. What's up with that?
+If changing `java.parameters` doesn't help, you can always tell `slowrake()` to skip POS tagging by setting `stop_pos` to `NULL`.
 
-Each keyword's score is the sum of the scores of its member words. So a keyword like "dog leash" will always have a higher score than keywords "dog" or "leash." You can try to filter out these long keywords by using the `freq` column to filter out all keywords that appear fewer than x times in each document.
+### Why do longer keywords (i.e., those that contain multiple words/tokens) always seem to have higher scores than shorter keywords?
+ 
+Each keyword's score is found by summing up all of the scores of the words found inside it. For example, the score for the keyword "dog leash" is found by adding the score for the word "dog" with the score for the word "leash."
 
-### Sometimes the part-of-speech tagging done by `slowrake()` seams to be wrong. What can I do about that?
+### Sometimes the part-of-speech tagging done by `slowrake()` appears to be incorrect. What can I do about this?
 
-First, I would check to see that the POS tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, try using a different tagger than the one used by `slowrake()`. Note, `get_pos_tags()` is basically a wrapper around the POS tagging functions found in the `openNLP` and `NLP` packages, so you'll want to look outside those packages for a different tagger.
+First, check if the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, try using a different tagger than the one used by `slowrake()`. Note, `get_pos_tags()` is basically a wrapper around the POS tagging functions found in the `openNLP` and `NLP` packages, so you'll want to look outside those packages for a different tagger.
 
-[^1]: Technically, the original version of RAKE will allow some keywords to contain stop words, but `slowrake()` does not allow for this.
+[^1]: Technically, the original version of RAKE allows some keywords to contain stop words, but `slowrake()` does not allow for this.
