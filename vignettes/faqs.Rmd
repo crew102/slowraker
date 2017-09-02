@@ -1,0 +1,38 @@
+---
+title: "Frequently asked questions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FAQs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### 1. Why is it called *slow*raker?
+
+`slowrake()` is written entirely in R, so it will probably be slower than the Java version of RAKE that I plan on writing in the near future (see the `rapidraker` R package for updates). You can speed up `slowrake()` by ignoring the words' part-of-speech (POS) when creating candidate keywords (i.e., set `stop_pos = NULL`).
+
+### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How can I fix this?
+
+`slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, thus causing the error. To fix this, try giving Java more memory:
+
+```r
+options(java.parameters = "-Xmx1024m")
+```
+
+To quote from [XLConnect](https://cran.r-project.org/web/packages/XLConnect/vignettes/XLConnect.pdf):
+
+> [java.parameters] are evaluated exactly once per R session when the JVM is initialized - this is usually once you load the first package that uses Java support, so you should do this as early as possible. 
+
+Also note that:
+
+> The upper limit of the `Xmx` parameter is system dependent - most prominently, 32bit Windows will fail to work with anything much larger than 1500m, and it is usually a bad idea to set `Xmx` larger than your physical memory size because garbage collection and virtual memory do not play well together.
+
+If changing `java.parameters` doesn't help, you can always tell `slowrake()` to skip POS tagging by setting `stop_pos` to `NULL`.
+
+### 3. Why do longer keywords (i.e., those that contain multiple words/tokens) always seem to have higher scores than shorter keywords?
+ 
+Each keyword's score is found by summing up all of the scores of the words found inside it. For example, the score for the keyword "dog leash" is found by adding the score for the word "dog" with the score for the word "leash."
+
+### 4. Sometimes the part-of-speech tagging done by `slowrake()` appears to be incorrect. What can I do about this?
+
+First, check if the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, try using a different tagger than the one used by `slowrake()`. Note, `get_pos_tags()` is basically a wrapper around the POS tagging functions found in the `openNLP` and `NLP` packages, so you'll want to look outside those packages for a different tagger.

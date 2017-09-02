@@ -59,7 +59,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 #' A relatively slow version of the Rapid Automatic Keyword Extraction (RAKE)
 #' algorithm. See \href{http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf}{Automatic keyword extraction from individual documents} for
 #' details on how RAKE works or read the "Getting started" vignette (
-#' \code{vignette("getting-started", package = "slowraker")}).
+#' \code{vignette("getting-started")}).
 #'
 #' @param txt A character vector, where each element of the vector contains the
 #'   text for one document.

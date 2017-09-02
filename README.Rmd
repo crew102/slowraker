@@ -59,4 +59,4 @@ head(rakedf, 5)
 
 ## Learning more
 
-You can learn about how the RAKE algorithm works as well as the basics of `slowrake()` in the "Getting started" vignette (`vignette("getting-started", package = "slowraker")`).
+To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started"`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs"`).
