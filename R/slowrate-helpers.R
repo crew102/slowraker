@@ -15,6 +15,16 @@ get_pos_tags <- function(txt) {
   )
 }
 
+handle_pos_error <- function(c_obj) {
+  er <- c_obj$message
+  if (grepl("memory", er, ignore.case = TRUE)) {
+    stop(er, "\n\nSee the second FAQ in the 'Frequently asked questions' ",
+         "vignette for how to fix this.")
+  } else {
+    stop(er)
+  }
+}
+
 stop_pos_tags <- function(pos_word_df, stop_pos) {
   in_stop_pos <- pos_word_df$pos %in% stop_pos
   # Replace unwanted words (based on POS) with a phrase delim (.):

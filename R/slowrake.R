@@ -15,7 +15,11 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
 
   # Remove words based on their POS
   if (!is.null(stop_pos)) {
-    pos_word_df <- get_pos_tags(txt = txt)
+    # Suggest how to solve an 'out of memory' Java error if it is thrown
+    tryCatch(
+      pos_word_df <- get_pos_tags(txt = txt),
+      error = handle_pos_error
+    )
     txt <- stop_pos_tags(pos_word_df = pos_word_df, stop_pos = stop_pos)
   }
 
