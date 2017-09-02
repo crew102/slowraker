@@ -54,9 +54,8 @@ get_cand_words <- function(txt, stop_words) {
 }
 
 filter_words <- function(cand_words, word_min_char) {
-  temp_vec <- lapply(cand_words, function(x) {
-    x[x != "" & grepl("[[:alpha:]]", x) & nchar(x) >= word_min_char]
-  })
+  temp_vec <- lapply(cand_words, function(x)
+    x[x != "" & grepl("[[:alpha:]]", x) & nchar(x) >= word_min_char])
   temp_vec[vapply(temp_vec, length, numeric(1)) > 0]
 }
 
@@ -68,12 +67,13 @@ gen_word_cnts <- function(cand_words) {
 }
 
 gen_degree <- function(wrd_cnts, cand_words) {
-  temp_score1 <- vapply(rownames(wrd_cnts), function(x) {
+  temp_score1 <- vapply(rownames(wrd_cnts), function(x)
     sum(
-      vapply(cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0),
-             numeric(1))
+      vapply(cand_words, function(q)
+        ifelse(x %in% q, length(q) - 1, 0), numeric(1)
+      )
     )
-  }, numeric(1))
+  , numeric(1))
 
   temp_score1 + wrd_cnts[, 1]
 }

@@ -20,8 +20,10 @@
 #' # With specifying doc_id:
 #' rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2])
 rbind_rakelist <- function(rakelist, doc_id = NULL) {
-  asrt("rakelist" %in% class(rakelist), "rakelist must be an object of class ",
-       "'rakelist'. See examples.")
+  asrt(
+    "rakelist" %in% class(rakelist),
+    "rakelist must be an object of class 'rakelist'. See examples."
+  )
 
   if (is.null(doc_id)) {
     doc_id <- as.character(seq_along(rakelist))
