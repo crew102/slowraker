@@ -67,4 +67,5 @@ head(rakedf, 5)
 
 ## Learning more
 
-To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started"`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs"`).
+* To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started")`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs")`).
+* All documentation is also on the package's [website](https://crew102.github.io/slowraker/index.html)
