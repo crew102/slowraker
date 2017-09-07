@@ -83,7 +83,7 @@
 <a href="#slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-can-i-fix-this" class="anchor"></a>2. <code><a href="../reference/slowrake.html">slowrake()</a></code> is erroring from some memory issue (<em>OutOfMemoryError</em>). How can I fix this?</h3>
 <p><code><a href="../reference/slowrake.html">slowrake()</a></code> relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, thus causing the error. To fix this, try giving Java more memory:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">"-Xmx1024m"</span>)</code></pre></div>
-<p>To quote from <a href="https://cran.r-project.org/web/packages/XLConnect/vignettes/XLConnect.pdf">XLConnect</a>:</p>
+<p>To quote from <a href="https://CRAN.R-project.org/package=XLConnect/vignettes/XLConnect.pdf">XLConnect</a>:</p>
 <blockquote>
 <p>[java.parameters] are evaluated exactly once per R session when the JVM is initialized - this is usually once you load the first package that uses Java support, so you should do this as early as possible.</p>
 </blockquote>

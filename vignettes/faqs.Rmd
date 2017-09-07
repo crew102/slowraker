@@ -19,7 +19,7 @@ vignette: >
 options(java.parameters = "-Xmx1024m")
 ```
 
-To quote from [XLConnect](https://cran.r-project.org/web/packages/XLConnect/vignettes/XLConnect.pdf):
+To quote from [XLConnect](https://CRAN.R-project.org/package=XLConnect/vignettes/XLConnect.pdf):
 
 > [java.parameters] are evaluated exactly once per R session when the JVM is initialized - this is usually once you load the first package that uses Java support, so you should do this as early as possible. 
 
