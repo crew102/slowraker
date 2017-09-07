@@ -13,7 +13,7 @@ vignette: >
 
 ### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How can I fix this?
 
-`slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, thus causing the error. To fix this, try giving Java more memory:
+`slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an *OutOfMemoryError*. To fix this, try giving Java more memory:
 
 ```r
 options(java.parameters = "-Xmx1024m")
@@ -31,8 +31,8 @@ If changing `java.parameters` doesn't help, you can always tell `slowrake()` to 
 
 ### 3. Why do longer keywords (i.e., those that contain multiple words/tokens) always seem to have higher scores than shorter keywords?
  
-Each keyword's score is found by summing up all of the scores of the words found inside it. For example, the score for the keyword "dog leash" is found by adding the score for the word "dog" with the score for the word "leash."
+Each keyword's score is found by summing up all of the scores assigned to its member words. For example, the score for the keyword "dog leash" is found by adding the score for the word "dog" with the score for the word "leash."
 
 ### 4. Sometimes the part-of-speech tagging done by `slowrake()` appears to be incorrect. What can I do about this?
 
-First, check if the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, try using a different tagger than the one used by `slowrake()`. Note, `get_pos_tags()` is basically a wrapper around the POS tagging functions found in the `openNLP` and `NLP` packages, so you'll want to look outside those packages for a different tagger.
+First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, try using a different tagger than the one used by `slowrake()`. Note, `get_pos_tags()` is basically a wrapper around the POS tagging functions found in the `openNLP` and `NLP` packages, so you'll want to look outside those libraries for a different tagger.

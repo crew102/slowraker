@@ -33,7 +33,7 @@ devtools::install_github("crew102/slowraker")
 
 ## Basic usage
 
-There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package - `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
 
 ```{r, eval = FALSE}
 library(slowraker)

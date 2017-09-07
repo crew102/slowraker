@@ -30,7 +30,7 @@ devtools::install_github("crew102/slowraker")
 
 ## Basic usage
 
-There is one main function in the `slowraker` package, `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package - `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
 
 ```{r, eval = FALSE}
 library(slowraker)
@@ -63,8 +63,8 @@ rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 
 ## Learning more
 
-One the site you will find
+One this site you will find:
 
 * A [getting started](articles/getting-started.html) vignette which explains how the RAKE algorithm works as well as the basics of `slowrake()`
 * A few example [applications](articles/applications.html)
-* Answers to [frequently asked questions](articles/faqs.html)
+* Answers to several [frequently asked questions](articles/faqs.html)
