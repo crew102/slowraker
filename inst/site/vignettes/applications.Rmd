@@ -1,0 +1,202 @@
+---
+title: "Applications"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{Applications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  progress = FALSE,
+  error = FALSE, 
+  message = FALSE,
+  warning = FALSE
+)
+
+options(digits = 2)
+```
+
+This vignette presents three examples of using `slowrake()` to extract keywords from text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article. 
+
+## Webpage
+
+#### 1. Scrape page and run RAKE
+
+```{r}
+# Load the libraries needed for all three applications
+library(slowraker)
+library(httr)
+library(xml2)
+library(patentsview)
+library(dplyr)
+library(pdftools)
+library(stringr)
+library(knitr)
+
+# The webpage of interest - slowraker's "Getting started" page
+url <- "https://crew102.github.io/slowraker/articles/getting-started.html"
+
+GET(url = url) %>% # Download the source
+  content("text") %>% 
+  read_html() %>% 
+  xml_find_all(".//p") %>% # Extract text from paragraph nodes
+  xml_text() %>% 
+  paste(collapse = " ") %>% # Paste paragraphs together
+  iconv(from = "UTF-8", "ASCII", sub = "'") %>% # slowraker doesn't support non-ASCII phrase delimiters yet (e.g., "“dog leash”")
+  slowrake() %>% # Run RAKE
+  .[[1]]
+```
+
+## Patent abstracts  
+
+#### 1. Download patent data
+
+```{r}
+# Download patent data for "keyword extraction" patents from the PatentsView API.
+pv_data <- search_pv(
+  query = qry_funs$text_phrase(patent_abstract = "keyword extraction"),
+  fields = c("patent_number", "patent_title", "patent_abstract"),
+  all_pages = TRUE
+)
+
+# Look at the data
+patents <- pv_data$data$patents
+kable(head(patents, n = 2))
+```
+
+#### 2. Run RAKE on the abstracts
+
+```{r, results = "hide"}
+# Run RAKE
+rakelist <- slowrake(
+  txt = patents$patent_abstract,
+  stop_words = c("method", smart_words), # Consider "method" to be a stop word
+  stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)] # Only use words that are nouns
+)
+
+# Create a single data frame with all patents' keywords
+out_rake <- rbind_rakelist(rakelist = rakelist, doc_id = patents$patent_number)
+head(out_rake)
+```
+
+```{r, echo = FALSE}
+head(out_rake)
+```
+
+#### 3. Show each patent's top keyword
+
+```{r}
+out_rake %>% 
+  group_by(doc_id) %>% 
+  arrange(desc(score)) %>%
+  slice(1) %>% 
+  select(1:2) %>% 
+  inner_join(patents, by = c("doc_id" = "patent_number")) %>% 
+  rename(patent_number = doc_id, top_keyword = keyword)
+```
+
+## Journal article
+
+#### 1. Pull text layer from PDF
+
+```{r, results = "hide"}
+# The journal article of interest - Rose et. al (i.e., the RAKE publication)
+url <- "http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf"
+
+# Download file and extract text
+destfile <- tempfile()
+GET(url = url, write_disk(destfile))
+raw_txt <- pdf_text(pdf = destfile)
+```
+
+#### 2. Apply basic text cleaning 
+
+```{r}
+# Helper function
+sub_all <- function(regex_vec, txt) {
+  pattern <- paste0(regex_vec, collapse = "|")
+  gsub(pattern = pattern, replacement = " ", x = txt)
+}
+
+txt1 <- 
+  paste0(raw_txt, collapse = " ") %>% 
+    gsub("\\r\\n", " ", .) %>% 
+    gsub(" {2,}", " ", .)
+
+# Regex to capture text that we don't want to run RAKE on
+remove1 <- "Acknowledgements.*"
+remove2 <- "TEXT MINING"
+remove3 <- "AUTOMATIC KEYWORD EXTRACTION"
+
+txt2 <- sub_all(c(remove1, remove2, remove3), txt = txt1)
+```
+
+#### 3. Detect and remove non-paragraphs
+
+There are some sections of the PDF's text that we don't want to run RAKE on, such as the text found in tables. The problem with these tables is that the text inside them does not contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it's difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.[^1] We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed. 
+
+Most of the tables in this article have numbers in them. So if we split the text into chunks using a digit delimiter, it's likely that most of a table's text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us only with the paragraphs. 
+
+```{r}
+# Numbers appear in paragraphs generally in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) when the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.
+remove4 <- "(Table|Figure) [[:digit:].]{1,}"
+remove5 <- "\\([12][[:digit:]]{3}\\)"
+txt3 <- sub_all(c(remove4, remove5), txt = txt2)
+
+# Split text into chunks based on number/digit delimiter
+txt_chunks <- unlist(strsplit(txt3, "[[:digit:]]"))
+
+# Count alpha chars in each chunk
+num_alpha <- str_count(txt_chunks, "[[:alpha:]]")
+
+# Use kmeans to determine what a paragraph's minimum char count should be.
+clust <- kmeans(num_alpha, centers = 2)
+good_clust <- which(max(clust$centers) == clust$centers)
+
+# Only keep chunks that are thought to be paragraphs
+good_chunks <- txt_chunks[clust$cluster == good_clust]
+final_txt <- paste(good_chunks, collapse = " ")
+```
+
+#### 4. Run RAKE
+
+```{r}
+rakelist <- slowrake(final_txt)
+
+head(rakelist[[1]])
+```
+
+#### 5. Filter out bad keywords
+
+The fact that some of the keywords shown above are very long suggests we missed something in Step 4. It turns out that our method mistook one of the tables for a paragraph (Table 1.1 shown below). Table 1.1 is somewhat atypical in that it doesn't contain any numbers, and thus it makes sense that our method missed it. 
+
+![](table-1-1.png)
+
+To clean up the results, let's apply an ad hoc filter on the keywords. This filter removes keywords whose long length indicates that a phrase run-on has occurred, and hence the keyword is no good.
+
+```{r}
+# Function to remove keywords that occur only once and have more than max_word_cnt constituent words
+filter_keywords.rakelist <- function(x, max_word_cnt = 3) {
+  structure(
+      lapply(x, function(r) {
+        word_cnt <- str_count(r$keyword, " ") + 1
+        to_filter <- r$freq == 1 & word_cnt > max_word_cnt
+        r[!to_filter, ]
+      }),
+      class = c("rakelist", "list")
+  )
+}
+
+filter_keywords <- function(x) UseMethod("filter_keywords")
+
+filter_keywords(rakelist)[[1]]
+```
+
+[^1]: There are better solutions to identifying tables in PDFs than the one I use here (e.g., the [tabula](https://github.com/tabulapdf/tabula-java/) Java library and its corresponding R wrapper, [tabulizer](https://github.com/ropensci/tabulizer#installation)).

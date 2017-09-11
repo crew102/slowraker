@@ -11,7 +11,7 @@ vignette: >
 
 `slowrake()` is written entirely in R, so it will probably be slower than the Java version of RAKE that I plan on writing in the near future (see the `rapidraker` R package for updates). You can speed up `slowrake()` by ignoring the words' part-of-speech (POS) when creating candidate keywords (i.e., set `stop_pos = NULL`).
 
-### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How can I fix this?
+### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How do I fix this?
 
 `slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an *OutOfMemoryError*. To fix this, try giving Java more memory:
 

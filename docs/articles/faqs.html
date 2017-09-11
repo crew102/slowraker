@@ -78,9 +78,9 @@
 <a href="#why-is-it-called-slowraker" class="anchor"></a>1. Why is it called <em>slow</em>raker?</h3>
 <p><code><a href="../reference/slowrake.html">slowrake()</a></code> is written entirely in R, so it will probably be slower than the Java version of RAKE that I plan on writing in the near future (see the <code>rapidraker</code> R package for updates). You can speed up <code><a href="../reference/slowrake.html">slowrake()</a></code> by ignoring the words’ part-of-speech (POS) when creating candidate keywords (i.e., set <code>stop_pos = NULL</code>).</p>
 </div>
-<div id="slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-can-i-fix-this" class="section level3">
+<div id="slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-do-i-fix-this" class="section level3">
 <h3 class="hasAnchor">
-<a href="#slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-can-i-fix-this" class="anchor"></a>2. <code><a href="../reference/slowrake.html">slowrake()</a></code> is erroring from some memory issue (<em>OutOfMemoryError</em>). How can I fix this?</h3>
+<a href="#slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-do-i-fix-this" class="anchor"></a>2. <code><a href="../reference/slowrake.html">slowrake()</a></code> is erroring from some memory issue (<em>OutOfMemoryError</em>). How do I fix this?</h3>
 <p><code><a href="../reference/slowrake.html">slowrake()</a></code> relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an <em>OutOfMemoryError</em>. To fix this, try giving Java more memory:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">"-Xmx1024m"</span>)</code></pre></div>
 <p>To quote from <a href="https://CRAN.R-project.org/package=XLConnect/vignettes/XLConnect.pdf">XLConnect</a>:</p>
