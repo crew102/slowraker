@@ -1,11 +1,10 @@
 # get_pos_tags adapted from:
 # http://martinschweinberger.de/docs/articles/PosTagR.pdf
-get_pos_tags <- function(txt) {
+get_pos_tags <- function(txt, word_token_annotator, pos_annotator) {
   str_txt <- NLP::as.String(txt)
-  word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
   a2 <- NLP::Annotation(1L, "sentence", 1L, nchar(str_txt))
   a2 <- NLP::annotate(str_txt, word_token_annotator, a2)
-  a3 <- NLP::annotate(str_txt, openNLP::Maxent_POS_Tag_Annotator(), a2)
+  a3 <- NLP::annotate(str_txt, pos_annotator, a2)
   a3w <- a3[a3$type == "word"]
   pos <- unlist(lapply(a3w$features, `[[`, "POS"))
   data.frame(

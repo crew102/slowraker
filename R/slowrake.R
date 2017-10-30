@@ -5,8 +5,8 @@
 # Comments refer to tokens as words (e.g., "hi" is a word) and refer to
 # contiguous sequences of tokens (i.e., phrases) as keywords (e.g., "hi there"
 # could be a keyword).
-slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
-
+slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
+                            word_token_annotator, pos_annotator) {
   # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
 
@@ -17,7 +17,11 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos) {
   if (!is.null(stop_pos)) {
     # Suggest how to solve an 'out of memory' Java error if it is thrown
     tryCatch(
-      pos_word_df <- get_pos_tags(txt = txt),
+      pos_word_df <- get_pos_tags(
+        txt = txt,
+        word_token_annotator = word_token_annotator,
+        pos_annotator = pos_annotator
+      ),
       error = handle_pos_error
     )
     txt <- stop_pos_tags(pos_word_df = pos_word_df, stop_pos = stop_pos)
@@ -120,10 +124,22 @@ slowrake <- function(txt, stop_words = smart_words,
     prog_bar <- utils::txtProgressBar(min = 0, max = num_docs, style = 3)
 
   all_out <- vector(mode = "list", length = num_docs)
+
+  if (!is.null(stop_pos)) {
+    pos_annotator <- openNLP::Maxent_POS_Tag_Annotator()
+    word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
+  }
+
   for (i in seq_along(txt)) {
-    all_out[[i]] <- slowrake_atomic(txt = txt[i], stop_words = stop_words,
-                                    word_min_char = word_min_char, stem = stem,
-                                    stop_pos = stop_pos)
+    all_out[[i]] <- slowrake_atomic(
+      txt = txt[i],
+      stop_words = stop_words,
+      word_min_char = word_min_char,
+      stem = stem,
+      stop_pos = stop_pos,
+      pos_annotator = pos_annotator,
+      word_token_annotator = word_token_annotator
+    )
     if (!one_doc) utils::setTxtProgressBar(prog_bar, i)
   }
 
