@@ -73,13 +73,10 @@
     
     
 <div class="contents">
-<p>This vignette presents three examples of using <code><a href="../reference/slowrake.html">slowrake()</a></code> to extract keywords from text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article.</p>
-<div id="webpage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#webpage" class="anchor"></a>Webpage</h2>
-<div id="scrape-page-and-run-rake" class="section level4">
+<p>This vignette presents three examples of using <code><a href="../reference/slowrake.html">slowrake()</a></code> to find keywords in text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article. ## Webpage</p>
+<div id="download-html-and-run-rake" class="section level4">
 <h4 class="hasAnchor">
-<a href="#scrape-page-and-run-rake" class="anchor"></a>1. Scrape page and run RAKE</h4>
+<a href="#download-html-and-run-rake" class="anchor"></a>1. Download HTML and run RAKE</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the libraries needed for all three applications</span>
 <span class="kw">library</span>(slowraker)
 <span class="kw">library</span>(httr)
@@ -108,14 +105,13 @@ url &lt;-<span class="st"> "https://crew102.github.io/slowraker/articles/getting
   </script>
 </div>
 </div>
-</div>
 <div id="patent-abstracts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#patent-abstracts" class="anchor"></a>Patent abstracts</h2>
 <div id="download-patent-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#download-patent-data" class="anchor"></a>1. Download patent data</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Download patent data for "keyword extraction" patents from the PatentsView API.</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Download data for patents that are related to "keyword extraction" from the PatentsView API.</span>
 pv_data &lt;-<span class="st"> </span><span class="kw">search_pv</span>(
   <span class="dt">query =</span> qry_funs<span class="op">$</span><span class="kw">text_phrase</span>(<span class="dt">patent_abstract =</span> <span class="st">"keyword extraction"</span>),
   <span class="dt">fields =</span> <span class="kw">c</span>(<span class="st">"patent_number"</span>, <span class="st">"patent_title"</span>, <span class="st">"patent_abstract"</span>),
@@ -219,9 +215,9 @@ txt2 &lt;-<span class="st"> </span><span class="kw">sub_all</span>(<span class="
 <div id="detect-and-remove-non-paragraphs" class="section level4">
 <h4 class="hasAnchor">
 <a href="#detect-and-remove-non-paragraphs" class="anchor"></a>3. Detect and remove non-paragraphs</h4>
-<p>There are some sections of the PDF’s text that we don’t want to run RAKE on, such as the text found in tables. The problem with these tables is that the text inside them does not contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it’s difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed.</p>
-<p>Most of the tables in this article have numbers in them. So if we split the text into chunks using a digit delimiter, it’s likely that most of a table’s text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us only with the paragraphs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Numbers appear in paragraphs generally in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) when the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.</span>
+<p>There are some sections of the PDF’s text that we don’t want to run RAKE on, such as the text found in tables. The problem with tables is that the text inside them usually doesn’t contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it’s difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed.</p>
+<p>Most of the tables in this article have numbers in them. If we split the PDF into text chunks using a digit delimiter, it’s likely that most of a table’s text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us with the paragraphs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.</span>
 remove4 &lt;-<span class="st"> "(Table|Figure) [[:digit:].]{1,}"</span>
 remove5 &lt;-<span class="st"> "</span><span class="ch">\\</span><span class="st">([12][[:digit:]]{3}</span><span class="ch">\\</span><span class="st">)"</span>
 txt3 &lt;-<span class="st"> </span><span class="kw">sub_all</span>(<span class="kw">c</span>(remove4, remove5), <span class="dt">txt =</span> txt2)
@@ -296,8 +292,7 @@ filter_keywords &lt;-<span class="st"> </span><span class="cf">function</span>(x
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#webpage">Webpage</a></li>
-      <li><a href="#patent-abstracts">Patent abstracts</a></li>
+<li><a href="#patent-abstracts">Patent abstracts</a></li>
       <li><a href="#journal-article">Journal article</a></li>
       </ul>
 </div>

@@ -25,8 +25,8 @@ rbind a rakelist
 rakelist <- slowrake(txt = dog_pubs$abstract[1:2])
 
 # Without specifying doc_id:
-rbind_rakelist(rakelist = rakelist)
+head(rbind_rakelist(rakelist = rakelist))
 
 # With specifying doc_id:
-rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2])
+head(rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2]))
 }

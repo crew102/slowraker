@@ -3,7 +3,7 @@ slowraker
 
 > A slow version of the Rapid Automatic Keyword Extraction (RAKE) algorithm
 
-[![Linux Build Status](https://travis-ci.org/crew102/slowraker.svg?branch=master)](https://travis-ci.org/crew102/slowraker) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/2ycx1m182va333ye?svg=true)](https://ci.appveyor.com/project/crew102/slowraker) [![](http://cranlogs.r-pkg.org/badges/slowraker)](http://cran.rstudio.com/web/packages/slowraker/index.html)
+[![Linux Build Status](https://travis-ci.org/crew102/slowraker.svg?branch=master)](https://travis-ci.org/crew102/slowraker) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/2ycx1m182va333ye?svg=true)](https://ci.appveyor.com/project/crew102/slowraker)
 
 Installation
 ------------
@@ -25,7 +25,7 @@ devtools::install_github("crew102/slowraker")
 Basic usage
 -----------
 
-There is one main function in the `slowraker` package - `slowrake()`. `slowrake()` will extract keywords from a vector of documents using the RAKE algorithm. RAKE doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package - `slowrake()`. `slowrake()` extracts keywords from a vector of documents using the RAKE algorithm. This algorithm doesn't require any training data, so it's super easy to use:
 
 ``` r
 library(slowraker)
@@ -33,6 +33,8 @@ library(slowraker)
 data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
+
+    #> Warning: package 'slowraker' was built under R version 3.4.2
 
 `slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for an element of `txt`:
 

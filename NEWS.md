@@ -1,3 +1,9 @@
+# slowraker 0.1.1
+
+#### Minor changes
+
+* `slowrake()` refactored to increase speed (now ~ 4X faster than V0.1.0)
+
 # slowraker 0.1.0
 
 #### New functions
