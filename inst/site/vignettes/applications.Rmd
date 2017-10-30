@@ -128,7 +128,7 @@ sub_all <- function(regex_vec, txt) {
 txt1 <- 
   paste0(raw_txt, collapse = " ") %>% 
     gsub("\\r\\n", " ", .) %>% 
-    gsub(" {2,}", " ", .)
+    gsub("[[:space:]]{2,}", " ", .)
 
 # Regex to capture text that we don't want to run RAKE on
 remove1 <- "Acknowledgements.*"
