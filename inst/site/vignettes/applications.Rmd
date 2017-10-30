@@ -23,11 +23,10 @@ knitr::opts_chunk$set(
 options(digits = 2)
 ```
 
-This vignette presents three examples of using `slowrake()` to extract keywords from text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article. 
-
+This vignette presents three examples of using `slowrake()` to find keywords in text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article. 
 ## Webpage
 
-#### 1. Scrape page and run RAKE
+#### 1. Download HTML and run RAKE
 
 ```{r}
 # Load the libraries needed for all three applications
@@ -59,7 +58,7 @@ GET(url = url) %>% # Download the source
 #### 1. Download patent data
 
 ```{r}
-# Download patent data for "keyword extraction" patents from the PatentsView API.
+# Download data for patents that are related to "keyword extraction" from the PatentsView API.
 pv_data <- search_pv(
   query = qry_funs$text_phrase(patent_abstract = "keyword extraction"),
   fields = c("patent_number", "patent_title", "patent_abstract"),
@@ -140,12 +139,12 @@ txt2 <- sub_all(c(remove1, remove2, remove3), txt = txt1)
 
 #### 3. Detect and remove non-paragraphs
 
-There are some sections of the PDF's text that we don't want to run RAKE on, such as the text found in tables. The problem with these tables is that the text inside them does not contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it's difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.[^1] We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed. 
+There are some sections of the PDF's text that we don't want to run RAKE on, such as the text found in tables. The problem with tables is that the text inside them usually doesn't contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it's difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.[^1] We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed. 
 
-Most of the tables in this article have numbers in them. So if we split the text into chunks using a digit delimiter, it's likely that most of a table's text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us only with the paragraphs. 
+Most of the tables in this article have numbers in them. If we split the PDF into text chunks using a digit delimiter, it's likely that most of a table's text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us with the paragraphs. 
 
 ```{r}
-# Numbers appear in paragraphs generally in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) when the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.
+# Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.
 remove4 <- "(Table|Figure) [[:digit:].]{1,}"
 remove5 <- "\\([12][[:digit:]]{3}\\)"
 txt3 <- sub_all(c(remove4, remove5), txt = txt2)

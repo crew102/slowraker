@@ -24,15 +24,15 @@ options(digits = 2)
 
 ## What is the RAKE algorithm?
 
-The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) as a way to quickly extract keywords from documents. In short, the algorithm involves two steps:
+The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) as a way to quickly extract keywords from documents. The algorithm invovles two main steps:
 
 **1. Identify candidate keywords.** A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn't contain a phrase delimiter or stop word.[^1] A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
 
 > RAKE is based on our observation that keywords frequently contain multiple words but rarely contain standard punctuation or stop words, such as the function words *and*, *the*, and *of*, or other words with minimal lexical meaning
 
-In addition to using stop words and phrase delimiters to split text into keywords, you can also use a word's part-of-speech (POS). For example, most keywords don't contain verbs, so you may want treat verbs as if they were stop words. The original implementation of RAKE (as per Rose et al.) does not use a word's POS when creating the candidate keywords, but `slowrake()` gives you this option.  
+In addition to using stop words and phrase delimiters to identify the candidate keywords, you can also use a word's part-of-speech (POS). For example, most keywords don't contain verbs, so you may want treat verbs as if they were stop words. You can use `slowrake()`'s `stop_pos` parameter to choose which parts-of-speech to exclude from your candidate keywords.
 
-**2. Calculate each keyword's score.** A keyword's score (i.e., its degree of "keywordness") is the sum of its *member word* scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A member word's score is equal to its degree/frequency, where degree is defined as the number of times that it co-occurs with another word in any keyword, and frequency is the total number of times that it occurs overall.
+**2. Calculate each keyword's score.** A keyword's score (i.e., its degree of "keywordness") is the sum of its *member word* scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A member word's score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with other words (in other keywords), and frequency is the total number of times that the word occurs overall.
 
 See [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) for more details on how RAKE works. 
 
