@@ -24,6 +24,7 @@ options(digits = 2)
 ```
 
 This vignette presents three examples of using `slowrake()` to find keywords in text. Each application runs RAKE on a different type of document, including a webpage, patent abstract(s), and a journal article. 
+
 ## Webpage
 
 #### 1. Download HTML and run RAKE
