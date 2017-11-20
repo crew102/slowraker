@@ -31,8 +31,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   # Split txt into list of keywords based on stop words/phrase delims
   cand_words <- get_cand_words(txt = txt, stop_words = stop_words)
   # Filter out words that are too short
-  cand_words <- filter_words(cand_words = cand_words,
-                             word_min_char = word_min_char)
+  cand_words <- filter_words(
+    cand_words = cand_words, word_min_char = word_min_char
+  )
 
   # Make sure we still have at least one keyword
   if (length(cand_words) == 0) return(NA)

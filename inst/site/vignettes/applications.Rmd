@@ -185,12 +185,12 @@ To clean up the results, let's apply an ad hoc filter on the keywords. This filt
 # Function to remove keywords that occur only once and have more than max_word_cnt constituent words
 filter_keywords.rakelist <- function(x, max_word_cnt = 3) {
   structure(
-      lapply(x, function(r) {
-        word_cnt <- str_count(r$keyword, " ") + 1
-        to_filter <- r$freq == 1 & word_cnt > max_word_cnt
-        r[!to_filter, ]
-      }),
-      class = c("rakelist", "list")
+    lapply(x, function(r) {
+      word_cnt <- str_count(r$keyword, " ") + 1
+      to_filter <- r$freq == 1 & word_cnt > max_word_cnt
+      r[!to_filter, ]
+    }),
+    class = c("rakelist", "list")
   )
 }
 

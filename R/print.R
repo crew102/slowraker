@@ -7,9 +7,10 @@ print.rakelist <- function(x, ...) {
     "\n# A rakelist containing", as.character(num_docs), "data frames:\n"
   )
 
-  utils::str(x[1:up_ind], vec.len = 1, max.level = 2, give.attr = FALSE,
-             digits.d = 2, strict.width = "cut", give.head = FALSE,
-             no.list = TRUE)
+  utils::str(
+    x[1:up_ind], vec.len = 1, max.level = 2, give.attr = FALSE,
+    digits.d = 2, strict.width = "cut", give.head = FALSE, no.list = TRUE
+  )
 
   if (num_docs > 2) {
     frames <- ifelse(num_docs == 3, "frame.", "frames.")
