@@ -39,3 +39,11 @@ test_that("word_min_char filtering works as expected", {
   out <- slowrake("dogs", word_min_char = 5)
   expect_true(is.na(unlist(out)))
 })
+
+test_that("phrase_delims works as expected", {
+  out <- slowrake(
+    "dogs are great, arn't they? at least i think they are.",
+    stop_words = NULL, stop_pos = NULL, phrase_delims = "\\?"
+  )
+  expect_true(grepl(",", out[[1]][1]))
+})

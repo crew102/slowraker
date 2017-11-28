@@ -6,7 +6,7 @@
 # contiguous sequences of tokens (i.e., phrases) as keywords (e.g., "hi there"
 # could be a keyword).
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
-                            word_token_annotator, pos_annotator) {
+                            word_token_annotator, pos_annotator, phrase_delims) {
   # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
 
@@ -29,7 +29,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 
   txt <- tolower(txt)
   # Split txt into list of keywords based on stop words/phrase delims
-  cand_words <- get_cand_words(txt = txt, stop_words = stop_words)
+  cand_words <- get_cand_words(
+    txt = txt, stop_words = stop_words, phrase_delims = phrase_delims
+  )
   # Filter out words that are too short
   cand_words <- filter_words(
     cand_words = cand_words, word_min_char = word_min_char
@@ -92,6 +94,8 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 #'   so you should consider the full length of the word and not the length of
 #'   its stem when choosing \code{word_min_char}.
 #' @param stem Do you want to stem the words before running RAKE?
+#' @param phrase_delims A regular expression containing the characters that
+#' will be used as phrase delimiters.
 #'
 #' @return An object of class \code{rakelist}, which is just a list of data
 #'   frames (one data frame for each element of \code{txt}). Each data frame
@@ -115,9 +119,12 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 #' slowrake(txt = "some text that has great keywords")
 #'
 #' slowrake(txt = dog_pubs$title[1:2], stem = FALSE)
-slowrake <- function(txt, stop_words = smart_words,
+slowrake <- function(txt,
+                     stop_words = smart_words,
                      stop_pos = c("VB", "VBD", "VBG", "VBN", "VBP", "VBZ"),
-                     word_min_char = 3, stem = TRUE) {
+                     word_min_char = 3,
+                     stem = TRUE,
+                     phrase_delims = "[-,.?():;\"!/]") {
 
   num_docs <- length(txt)
   one_doc <- num_docs == 1
@@ -139,7 +146,8 @@ slowrake <- function(txt, stop_words = smart_words,
       stem = stem,
       stop_pos = stop_pos,
       pos_annotator = pos_annotator,
-      word_token_annotator = word_token_annotator
+      word_token_annotator = word_token_annotator,
+      phrase_delims = phrase_delims
     )
     if (!one_doc) utils::setTxtProgressBar(prog_bar, i)
   }

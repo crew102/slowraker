@@ -5,7 +5,8 @@
 \title{Slow RAKE}
 \usage{
 slowrake(txt, stop_words = smart_words, stop_pos = c("VB", "VBD", "VBG",
-  "VBN", "VBP", "VBZ"), word_min_char = 3, stem = TRUE)
+  "VBN", "VBP", "VBZ"), word_min_char = 3, stem = TRUE,
+  phrase_delims = "[-,.?():;\\"!/]")
 }
 \arguments{
 \item{txt}{A character vector, where each element of the vector contains the
@@ -34,6 +35,9 @@ so you should consider the full length of the word and not the length of
 its stem when choosing \code{word_min_char}.}
 
 \item{stem}{Do you want to stem the words before running RAKE?}
+
+\item{phrase_delims}{A regular expression containing the characters that
+will be used as phrase delimiters.}
 }
 \value{
 An object of class \code{rakelist}, which is just a list of data

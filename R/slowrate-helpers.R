@@ -33,14 +33,13 @@ stop_pos_tags <- function(pos_word_df, stop_pos) {
   paste(pos_word_df$word, collapse = " ")
 }
 
-gen_split_regex <- function(stop_words) {
-  phrase_end_regex <- '[-,.?():;"!/]|\''
+apend_split_txt <- function(stop_words, phrase_delims) {
   if (!is.null(stop_words)) {
     stop_words_wrds <- paste0("\\b", tolower(stop_words), "\\b")
     stop_regex <- paste0(stop_words_wrds, collapse = "|")
-    paste0(stop_regex, "|", phrase_end_regex)
+    paste0(stop_regex, "|", phrase_delims)
   } else {
-    phrase_end_regex
+    phrase_delims
   }
 }
 
@@ -49,8 +48,8 @@ split_string <- function(txt, regex) {
   strsplit(x, " ")
 }
 
-get_cand_words <- function(txt, stop_words) {
-  regex <- gen_split_regex(stop_words = stop_words)
+get_cand_words <- function(txt, stop_words, phrase_delims) {
+  regex <- apend_split_txt(stop_words = stop_words, phrase_delims = phrase_delims)
   split_string(txt = txt, regex = regex)
 }
 
