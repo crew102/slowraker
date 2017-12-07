@@ -98,7 +98,8 @@ details on how RAKE works or read the "Getting started" vignette (
     
 
     <pre class="usage"><span class='fu'>slowrake</span>(<span class='no'>txt</span>, <span class='kw'>stop_words</span> <span class='kw'>=</span> <span class='no'>smart_words</span>, <span class='kw'>stop_pos</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"VB"</span>, <span class='st'>"VBD"</span>, <span class='st'>"VBG"</span>,
-  <span class='st'>"VBN"</span>, <span class='st'>"VBP"</span>, <span class='st'>"VBZ"</span>), <span class='kw'>word_min_char</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='st'>"VBN"</span>, <span class='st'>"VBP"</span>, <span class='st'>"VBZ"</span>), <span class='kw'>word_min_char</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>phrase_delims</span> <span class='kw'>=</span> <span class='st'>"[-,.?():;\"!/]"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +141,11 @@ its stem when choosing <code>word_min_char</code>.</p></td>
       <th>stem</th>
       <td><p>Do you want to stem the words before running RAKE?</p></td>
     </tr>
+    <tr>
+      <th>phrase_delims</th>
+      <td><p>A regular expression containing the characters that
+will be used as phrase delimiters.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -175,10 +181,10 @@ its stem when choosing <code>word_min_char</code>.</p></td>
 #&gt;   ..$ keyword:"assistance dogs" ...
 #&gt;   ..$ freq   :1 1 ...
 #&gt;   ..$ score  :4 4 ...
-#&gt;  $ :'data.frame':	7 obs. of  3 variables:
-#&gt;   ..$ keyword:"guide dog owners" ...
+#&gt;  $ :'data.frame':	6 obs. of  3 variables:
+#&gt;   ..$ keyword:"guide dog owners perspectives" ...
 #&gt;   ..$ freq   :1 1 ...
-#&gt;   ..$ score  :7.5 4.5 ...</div></pre>
+#&gt;   ..$ score  :13 ...</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

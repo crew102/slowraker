@@ -121,7 +121,7 @@ frame.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>rakelist</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='slowrake.html'>slowrake</a></span>(<span class='kw'>txt</span> <span class='kw'>=</span> <span class='no'>dog_pubs</span>$<span class='no'>abstract</span>[<span class='fl'>1</span>:<span class='fl'>2</span>])</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</div><div class='input'>
 <span class='co'># Without specifying doc_id:</span>
-<span class='fu'>head</span>(<span class='fu'>rbind_rakelist</span>(<span class='kw'>rakelist</span> <span class='kw'>=</span> <span class='no'>rakelist</span>))</div><div class='output co'>#&gt;   doc_id                            keyword freq     score
+<span class='fu'>head</span>(<span class='fu'>rbind_rakelist</span>(<span class='no'>rakelist</span>))</div><div class='output co'>#&gt;   doc_id                            keyword freq     score
 #&gt; 1      1 assistance dog identification tags    1 10.833333
 #&gt; 2      1          animal control facilities    1  9.000000
 #&gt; 3      1          emotional support animals    1  9.000000
@@ -136,7 +136,7 @@ frame.</p></td>
 #&gt; 5    seemingli inappropri dog
 #&gt; 6 government oversight system</div><div class='input'>
 <span class='co'># With specifying doc_id:</span>
-<span class='fu'>head</span>(<span class='fu'>rbind_rakelist</span>(<span class='kw'>rakelist</span> <span class='kw'>=</span> <span class='no'>rakelist</span>, <span class='kw'>doc_id</span> <span class='kw'>=</span> <span class='no'>dog_pubs</span>$<span class='no'>doi</span>[<span class='fl'>1</span>:<span class='fl'>2</span>]))</div><div class='output co'>#&gt;                         doc_id                            keyword freq
+<span class='fu'>head</span>(<span class='fu'>rbind_rakelist</span>(<span class='no'>rakelist</span>, <span class='kw'>doc_id</span> <span class='kw'>=</span> <span class='no'>dog_pubs</span>$<span class='no'>doi</span>[<span class='fl'>1</span>:<span class='fl'>2</span>]))</div><div class='output co'>#&gt;                         doc_id                            keyword freq
 #&gt; 1 10.1371/journal.pone.0132820 assistance dog identification tags    1
 #&gt; 2 10.1371/journal.pone.0132820          animal control facilities    1
 #&gt; 3 10.1371/journal.pone.0132820          emotional support animals    1

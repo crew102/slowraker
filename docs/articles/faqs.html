@@ -76,12 +76,12 @@
 <div id="why-is-it-called-slowraker" class="section level3">
 <h3 class="hasAnchor">
 <a href="#why-is-it-called-slowraker" class="anchor"></a>1. Why is it called <em>slow</em>raker?</h3>
-<p><code><a href="../reference/slowrake.html">slowrake()</a></code> is written entirely in R, so it will probably be slower than the Java version of RAKE that I plan on writing in the near future (see the <code>rapidraker</code> R package for updates). You can speed up <code><a href="../reference/slowrake.html">slowrake()</a></code> by ignoring the words’ part-of-speech (POS) when creating candidate keywords (i.e., set <code>stop_pos = NULL</code>).</p>
+<p><code><a href="../reference/slowrake.html">slowrake()</a></code> is written mostly in R and hence is slower than the Java-based implmentation of RAKE provided in the <a href="https://github.com/crew102/rapidraker"><code>rapidraker</code> R package</a>. You can speed up <code><a href="../reference/slowrake.html">slowrake()</a></code> by ignoring the words’ part-of-speech when creating candidate keywords (i.e., set <code>stop_pos = NULL</code>).</p>
 </div>
 <div id="slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-do-i-fix-this" class="section level3">
 <h3 class="hasAnchor">
 <a href="#slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-do-i-fix-this" class="anchor"></a>2. <code><a href="../reference/slowrake.html">slowrake()</a></code> is erroring from some memory issue (<em>OutOfMemoryError</em>). How do I fix this?</h3>
-<p><code><a href="../reference/slowrake.html">slowrake()</a></code> relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an <em>OutOfMemoryError</em>. To fix this, try giving Java more memory:</p>
+<p><code><a href="../reference/slowrake.html">slowrake()</a></code> relies on Java for part-of-speech (POS) tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an <em>OutOfMemoryError</em>. To fix this, try giving Java more memory:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">java.parameters =</span> <span class="st">"-Xmx1024m"</span>)</code></pre></div>
 <p>To quote from <a href="https://CRAN.R-project.org/package=XLConnect/vignettes/XLConnect.pdf">XLConnect</a>:</p>
 <blockquote>
@@ -96,12 +96,17 @@
 <div id="why-do-longer-keywords-i-e--those-that-contain-multiple-wordstokens-always-seem-to-have-higher-scores-than-shorter-keywords" class="section level3">
 <h3 class="hasAnchor">
 <a href="#why-do-longer-keywords-i-e--those-that-contain-multiple-wordstokens-always-seem-to-have-higher-scores-than-shorter-keywords" class="anchor"></a>3. Why do longer keywords (i.e., those that contain multiple words/tokens) always seem to have higher scores than shorter keywords?</h3>
-<p>Each keyword’s score is found by summing up all of the scores assigned to its member words. For example, the score for the keyword “dog leash” is found by adding the score for the word “dog” with the score for the word “leash.”</p>
+<p>Each keyword’s score is calculated by summing up the scores of all of its member words. For example, the score for the keyword “dog leash” is calculated by adding the score for the word “dog” with the score for the word “leash.” This means that longer keywords will usually have higher scores than shorter ones.</p>
 </div>
 <div id="sometimes-the-part-of-speech-tagging-done-by-slowrake-appears-to-be-incorrect--what-can-i-do-about-this" class="section level3">
 <h3 class="hasAnchor">
 <a href="#sometimes-the-part-of-speech-tagging-done-by-slowrake-appears-to-be-incorrect--what-can-i-do-about-this" class="anchor"></a>4. Sometimes the part-of-speech tagging done by <code><a href="../reference/slowrake.html">slowrake()</a></code> appears to be incorrect. What can I do about this?</h3>
-<p>First, confirm that the tagging function used by <code><a href="../reference/slowrake.html">slowrake()</a></code> (<code>get_pos_tags()</code>) is indeed giving the wrong tags. To do that, try something like: <code>slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")</code>. If the returned tags are indeed incorrect, try using a different tagger than the one used by <code><a href="../reference/slowrake.html">slowrake()</a></code>. Note, <code>get_pos_tags()</code> is basically a wrapper around the POS tagging functions found in the <code>openNLP</code> and <code>NLP</code> packages, so you’ll want to look outside those libraries for a different tagger.</p>
+<p>First, confirm that the tagging function used by <code><a href="../reference/slowrake.html">slowrake()</a></code> (<code>get_pos_tags()</code>) is indeed giving the wrong tags. To do that, try something like: <code>slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")</code>. If the returned tags are indeed incorrect, you couuld try to use a different function for POS tagging. Note, <code>get_pos_tags()</code> is basically a wrapper around the POS tagging methods found in the <code>openNLP</code> and <code>NLP</code> packages, so you’ll want to look outside those libraries for a different tagger.</p>
+</div>
+<div id="why-am-i-getting-different-results-from-slowakerslowrake-vs-rapidrakerrapidrake" class="section level3">
+<h3 class="hasAnchor">
+<a href="#why-am-i-getting-different-results-from-slowakerslowrake-vs-rapidrakerrapidrake" class="anchor"></a>5. Why am I getting different results from <code>slowaker::slowrake()</code> vs <code><a href="http://www.rdocumentation.org/packages/rapidraker/topics/rapidrake">rapidraker::rapidrake()</a></code>?</h3>
+<p>The two functions use different libraries for tokenization and stemming, which can lead to slightly different results, both in terms of the keywords that are identified as well as their scores.</p>
 </div>
 </div>
   </div>
