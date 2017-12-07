@@ -34,9 +34,7 @@ data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-    #> Warning: package 'slowraker' was built under R version 3.4.2
-
-`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for an element of `txt`:
+`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for a given element of `txt`:
 
 ``` r
 rakelist
@@ -58,7 +56,7 @@ rakelist
 You can bind these data frames together using `rbind_rakelist()`:
 
 ``` r
-rakedf <- rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
+rakedf <- rbind_rakelist(rakelist, doc_id = dog_pubs$doi[1:5])
 head(rakedf, 5)
 #>                         doc_id                            keyword freq score
 #> 1 10.1371/journal.pone.0132820 assistance dog identification tags    1  10.8
@@ -77,5 +75,5 @@ head(rakedf, 5)
 Learning more
 -------------
 
--   To learn about how the RAKE algorithm works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started")`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs")`).
+-   To learn about how RAKE works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started")`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs")`).
 -   All documentation is also on the package's [website](https://crew102.github.io/slowraker/index.html)

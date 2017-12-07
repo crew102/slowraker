@@ -6,7 +6,11 @@ output: github_document
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  progress = FALSE,
+  error = FALSE, 
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
@@ -49,7 +53,7 @@ data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for an element of `txt`:
+`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for a given element of `txt`:
 
 ```{r}
 rakelist
@@ -65,6 +69,6 @@ rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
 
 One this site you will find:
 
-* A [getting started](articles/getting-started.html) vignette which explains how the RAKE algorithm works as well as the basics of `slowrake()`
+* A [getting started](articles/getting-started.html) vignette which explains how RAKE works as well as the basics of `slowrake()`
 * A few example [applications](articles/applications.html)
 * Answers to [frequently asked questions](articles/faqs.html)

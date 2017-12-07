@@ -18,23 +18,23 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
     # Suggest how to solve an 'out of memory' Java error if it is thrown
     tryCatch(
       pos_word_df <- get_pos_tags(
-        txt = txt,
+        txt,
         word_token_annotator = word_token_annotator,
         pos_annotator = pos_annotator
       ),
       error = handle_pos_error
     )
-    txt <- stop_pos_tags(pos_word_df = pos_word_df, stop_pos = stop_pos)
+    txt <- stop_pos_tags(pos_word_df, stop_pos = stop_pos)
   }
 
   txt <- tolower(txt)
   # Split txt into list of keywords based on stop words/phrase delims
   cand_words <- get_cand_words(
-    txt = txt, stop_words = stop_words, phrase_delims = phrase_delims
+    txt, stop_words = stop_words, phrase_delims = phrase_delims
   )
   # Filter out words that are too short
   cand_words <- filter_words(
-    cand_words = cand_words, word_min_char = word_min_char
+    cand_words, word_min_char = word_min_char
   )
 
   # Make sure we still have at least one keyword
@@ -48,7 +48,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   if (stem) cand_words <- lapply(cand_words, SnowballC::wordStem)
 
   # Calculate keyword scores
-  score <- calc_keyword_scores(cand_words = cand_words)
+  score <- calc_keyword_scores(cand_words)
 
   keyword_df <- data.frame(
     keyword = keyword,
@@ -62,7 +62,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
       paste0(x, collapse = " "), character(1))
 
   # Create output data frame
-  process_keyword_df(keyword_df = keyword_df)
+  process_keyword_df(keyword_df)
 }
 
 #' Slow RAKE

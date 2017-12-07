@@ -15,10 +15,10 @@
 #' rakelist <- slowrake(txt = dog_pubs$abstract[1:2])
 #'
 #' # Without specifying doc_id:
-#' head(rbind_rakelist(rakelist = rakelist))
+#' head(rbind_rakelist(rakelist))
 #'
 #' # With specifying doc_id:
-#' head(rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:2]))
+#' head(rbind_rakelist(rakelist, doc_id = dog_pubs$doi[1:2]))
 rbind_rakelist <- function(rakelist, doc_id = NULL) {
   asrt(
     "rakelist" %in% class(rakelist),

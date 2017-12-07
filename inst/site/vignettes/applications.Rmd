@@ -27,7 +27,7 @@ This vignette presents three examples of using `slowrake()` to find keywords in 
 
 ## Webpage
 
-#### 1. Download HTML and run RAKE
+#### 1. Download the HTML and run RAKE
 
 ```{r}
 # Load the libraries needed for all three applications
@@ -74,15 +74,14 @@ kable(head(patents, n = 2))
 #### 2. Run RAKE on the abstracts
 
 ```{r, results = "hide"}
-# Run RAKE
 rakelist <- slowrake(
-  txt = patents$patent_abstract,
+  patents$patent_abstract,
   stop_words = c("method", smart_words), # Consider "method" to be a stop word
   stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)] # Only use words that are nouns
 )
 
 # Create a single data frame with all patents' keywords
-out_rake <- rbind_rakelist(rakelist = rakelist, doc_id = patents$patent_number)
+out_rake <- rbind_rakelist(rakelist, doc_id = patents$patent_number)
 head(out_rake)
 ```
 
@@ -97,23 +96,25 @@ out_rake %>%
   group_by(doc_id) %>% 
   arrange(desc(score)) %>%
   slice(1) %>% 
-  select(1:2) %>% 
   inner_join(patents, by = c("doc_id" = "patent_number")) %>% 
-  rename(patent_number = doc_id, top_keyword = keyword)
+  rename(patent_number = doc_id, top_keyword = keyword) %>% 
+  select(matches("number|title|keyword")) %>%
+  head() %>%
+  kable()
 ```
 
 ## Journal article
 
-#### 1. Pull text layer from PDF
+#### 1. Get PDF text
 
 ```{r, results = "hide"}
 # The journal article of interest - Rose et. al (i.e., the RAKE publication)
 url <- "http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf"
 
-# Download file and extract text
+# Download file and pull out text layer from PDF
 destfile <- tempfile()
-GET(url = url, write_disk(destfile))
-raw_txt <- pdf_text(pdf = destfile)
+GET(url, write_disk(destfile))
+raw_txt <- pdf_text(destfile)
 ```
 
 #### 2. Apply basic text cleaning 
@@ -145,18 +146,18 @@ There are some sections of the PDF's text that we don't want to run RAKE on, suc
 Most of the tables in this article have numbers in them. If we split the PDF into text chunks using a digit delimiter, it's likely that most of a table's text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us with the paragraphs. 
 
 ```{r}
-# Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart based on them.
+# Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart.
 remove4 <- "(Table|Figure) [[:digit:].]{1,}"
 remove5 <- "\\([12][[:digit:]]{3}\\)"
 txt3 <- sub_all(c(remove4, remove5), txt = txt2)
 
-# Split text into chunks based on number/digit delimiter
+# Split text into chunks based on digit delimiter
 txt_chunks <- unlist(strsplit(txt3, "[[:digit:]]"))
 
 # Count alpha chars in each chunk
 num_alpha <- str_count(txt_chunks, "[[:alpha:]]")
 
-# Use kmeans to determine what a paragraph's minimum char count should be.
+# Use kmeans to determine what a paragraph's minimum char count should be
 clust <- kmeans(num_alpha, centers = 2)
 good_clust <- which(max(clust$centers) == clust$centers)
 
@@ -183,7 +184,7 @@ To clean up the results, let's apply an ad hoc filter on the keywords. This filt
 
 ```{r}
 # Function to remove keywords that occur only once and have more than max_word_cnt constituent words
-filter_keywords.rakelist <- function(x, max_word_cnt = 3) {
+filter.rakelist <- function(x, max_word_cnt = 3) {
   structure(
     lapply(x, function(r) {
       word_cnt <- str_count(r$keyword, " ") + 1
@@ -194,9 +195,9 @@ filter_keywords.rakelist <- function(x, max_word_cnt = 3) {
   )
 }
 
-filter_keywords <- function(x) UseMethod("filter_keywords")
+filter <- function(x) UseMethod("filter")
 
-filter_keywords(rakelist)[[1]]
+filter(rakelist)[[1]]
 ```
 
 [^1]: There are better solutions to identifying tables in PDFs than the one I use here (e.g., the [tabula](https://github.com/tabulapdf/tabula-java/) Java library and its corresponding R wrapper, [tabulizer](https://github.com/ropensci/tabulizer#installation)).

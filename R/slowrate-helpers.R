@@ -49,8 +49,8 @@ split_string <- function(txt, regex) {
 }
 
 get_cand_words <- function(txt, stop_words, phrase_delims) {
-  regex <- apend_split_txt(stop_words = stop_words, phrase_delims = phrase_delims)
-  split_string(txt = txt, regex = regex)
+  regex <- apend_split_txt(stop_words, phrase_delims = phrase_delims)
+  split_string(txt, regex = regex)
 }
 
 filter_words <- function(cand_words, word_min_char) {
@@ -87,9 +87,9 @@ calc_word_scores <- function(wrd_cnts, degree) {
 
 calc_keyword_scores <- function(cand_words) {
   # Get word counts for all distinct words
-  wrd_cnts <- gen_word_cnts(cand_words = cand_words)
+  wrd_cnts <- gen_word_cnts(cand_words)
   # Get word's degree score
-  degree <- gen_degree(wrd_cnts = wrd_cnts, cand_words = cand_words)
+  degree <- gen_degree(wrd_cnts, cand_words = cand_words)
 
   # Get each word's score as per degree/frequency
   word_scores <- calc_word_scores(wrd_cnts = wrd_cnts, degree = degree)
