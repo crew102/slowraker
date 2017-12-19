@@ -62,7 +62,7 @@ rakelist
 You can bind these data frames together using `rbind_rakelist()`:
 
 ```{r}
-rbind_rakelist(rakelist = rakelist, doc_id = dog_pubs$doi[1:5])
+rbind_rakelist(rakelist, doc_id = dog_pubs$doi[1:5])
 ```
 
 ## Learning more
@@ -71,4 +71,5 @@ One this site you will find:
 
 * A [getting started](articles/getting-started.html) vignette which explains how RAKE works as well as the basics of `slowrake()`
 * A few example [applications](articles/applications.html)
+* An introduction to a faster version of `slowraker` called [rapidraker](articles/rapidraker.html)
 * Answers to [frequently asked questions](articles/faqs.html)
