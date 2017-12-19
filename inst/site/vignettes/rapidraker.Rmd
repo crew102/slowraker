@@ -61,7 +61,7 @@ rakelist <- rapidrake(txt = dog_pubs$abstract[1:5])
 head(rbind_rakelist(rakelist))
 ```
 
-## Performance of `slowrake()` vs `rapidrake()`:
+## Performance of `slowraker` vs `rapidraker`
 
 ```{r, results = 'hide'}
 txt <- rep(dog_pubs$abstract, 20)

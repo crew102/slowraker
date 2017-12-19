@@ -104,14 +104,15 @@ rakelist &lt;-<span class="st"> </span><span class="kw">rapidrake</span>(<span c
   </script>
 </div>
 </div>
-<div id="performance-of-slowrake-vs-rapidrake" class="section level2">
+<div id="performance-of-slowraker-vs-rapidraker" class="section level2">
 <h2 class="hasAnchor">
-<a href="#performance-of-slowrake-vs-rapidrake" class="anchor"></a>Performance of <code><a href="../reference/slowrake.html">slowrake()</a></code> vs <code>rapidrake()</code>:</h2>
+<a href="#performance-of-slowraker-vs-rapidraker" class="anchor"></a>Performance of <code>slowraker</code> vs <code>rapidraker</code>
+</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">txt &lt;-<span class="st"> </span><span class="kw">rep</span>(dog_pubs<span class="op">$</span>abstract, <span class="dv">20</span>)
 
 sr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw"><a href="../reference/slowrake.html">slowrake</a></span>(txt))[[<span class="st">"elapsed"</span>]]
 rr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw">rapidrake</span>(txt))[[<span class="st">"elapsed"</span>]]</code></pre></div>
-<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 81.69 seconds to execute while <code>rapidrake()</code> took 11.38 seconds, suggesting that the Java implementation of RAKE was about 7 times faster than the R version.</p>
+<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 80.37 seconds to execute while <code>rapidrake()</code> took 11.32 seconds, suggesting that the Java implementation of RAKE was about 7 times faster than the R version.</p>
 </div>
 <div id="making-rapidrake-even-faster" class="section level2">
 <h2 class="hasAnchor">
@@ -140,7 +141,7 @@ rr_par_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(
 )[[<span class="st">"elapsed"</span>]]
 
 <span class="kw">stopCluster</span>(cl)</code></pre></div>
-<p>The sequential version of <code>rapidrake()</code> took 11.38 seconds to extract keywords for 600 documents, while the parallel version took 26.17 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 3 times faster than the regular version.</p>
+<p>The sequential version of <code>rapidrake()</code> took 11.32 seconds to extract keywords for 600 documents, while the parallel version took 26.21 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 3 times faster than the regular version.</p>
 </div>
 </div>
   </div>
@@ -153,7 +154,7 @@ rr_par_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(
 <li><a href="#what-is-rapidraker">What is <code>rapidraker</code>?</a></li>
       <li><a href="#installation">Installation</a></li>
       <li><a href="#basic-usage">Basic usage</a></li>
-      <li><a href="#performance-of-slowrake-vs-rapidrake">Performance of <code><a href="--/reference/slowrake-html">slowrake()</a></code> vs <code>rapidrake()</code>:</a></li>
+      <li><a href="#performance-of-slowraker-vs-rapidraker">Performance of <code>slowraker</code> vs <code>rapidraker</code></a></li>
       <li><a href="#making-rapidrake-even-faster">Making <code>rapidrake()</code> even faster</a></li>
       </ul>
 </div>

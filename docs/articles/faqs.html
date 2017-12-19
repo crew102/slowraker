@@ -79,7 +79,7 @@
 <div id="why-is-it-called-slowraker" class="section level3">
 <h3 class="hasAnchor">
 <a href="#why-is-it-called-slowraker" class="anchor"></a>1. Why is it called <em>slow</em>raker?</h3>
-<p><code><a href="../reference/slowrake.html">slowrake()</a></code> is written mostly in R and hence is slower than the Java-based implmentation of RAKE provided in the <a href="https://github.com/crew102/rapidraker"><code>rapidraker</code> R package</a>. You can speed up <code><a href="../reference/slowrake.html">slowrake()</a></code> by ignoring the words’ part-of-speech when creating candidate keywords (i.e., set <code>stop_pos = NULL</code>).</p>
+<p><code><a href="../reference/slowrake.html">slowrake()</a></code> is written mostly in R and hence is slower than the Java-based implementation of RAKE provided in the <a href="https://github.com/crew102/rapidraker"><code>rapidraker</code> R package</a>. You can speed up <code><a href="../reference/slowrake.html">slowrake()</a></code> by ignoring the words’ part-of-speech when creating candidate keywords (i.e., set <code>stop_pos = NULL</code>).</p>
 </div>
 <div id="slowrake-is-erroring-from-some-memory-issue-outofmemoryerror--how-do-i-fix-this" class="section level3">
 <h3 class="hasAnchor">
@@ -104,12 +104,12 @@
 <div id="sometimes-the-part-of-speech-tagging-done-by-slowrake-appears-to-be-incorrect--what-can-i-do-about-this" class="section level3">
 <h3 class="hasAnchor">
 <a href="#sometimes-the-part-of-speech-tagging-done-by-slowrake-appears-to-be-incorrect--what-can-i-do-about-this" class="anchor"></a>4. Sometimes the part-of-speech tagging done by <code><a href="../reference/slowrake.html">slowrake()</a></code> appears to be incorrect. What can I do about this?</h3>
-<p>First, confirm that the tagging function used by <code><a href="../reference/slowrake.html">slowrake()</a></code> (<code>get_pos_tags()</code>) is indeed giving the wrong tags. To do that, try something like: <code>slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")</code>. If the returned tags are indeed incorrect, you couuld try to use a different function for POS tagging. Note, <code>get_pos_tags()</code> is basically a wrapper around the POS tagging methods found in the <code>openNLP</code> and <code>NLP</code> packages, so you’ll want to look outside those libraries for a different tagger.</p>
+<p>First, confirm that the tagging function used by <code><a href="../reference/slowrake.html">slowrake()</a></code> (<code>get_pos_tags()</code>) is indeed giving the wrong tags. To do that, try something like: <code>slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")</code>. If the returned tags are indeed incorrect, you could try to use a different function for POS tagging. Note, <code>get_pos_tags()</code> is basically a wrapper around the POS tagging methods found in the <code>openNLP</code> and <code>NLP</code> packages, so you’ll want to look outside those libraries for a different tagger.</p>
 </div>
-<div id="why-am-i-getting-different-results-from-slowakerslowrake-vs-rapidrakerrapidrake" class="section level3">
+<div id="why-am-i-getting-different-results-from-slowraker-vs-rapidraker" class="section level3">
 <h3 class="hasAnchor">
-<a href="#why-am-i-getting-different-results-from-slowakerslowrake-vs-rapidrakerrapidrake" class="anchor"></a>5. Why am I getting different results from <code>slowaker::slowrake()</code> vs <code><a href="http://www.rdocumentation.org/packages/rapidraker/topics/rapidrake">rapidraker::rapidrake()</a></code>?</h3>
-<p>The two functions use different libraries for tokenization and stemming, which can lead to slightly different results, both in terms of the keywords that are identified as well as their scores.</p>
+<a href="#why-am-i-getting-different-results-from-slowraker-vs-rapidraker" class="anchor"></a>5. Why am I getting different results from <code>slowraker</code> vs <code>rapidraker</code>?</h3>
+<p>The two functions use different libraries for tokenization and stemming. This can lead to slightly different results in terms of which keywords are identified as well as what their scores are.</p>
 </div>
 </div>
   </div>

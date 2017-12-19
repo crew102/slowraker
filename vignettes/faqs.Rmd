@@ -9,7 +9,7 @@ vignette: >
 
 ### 1. Why is it called *slow*raker?
 
-`slowrake()` is written mostly in R and hence is slower than the Java-based implmentation of RAKE provided in the [`rapidraker` R package](https://github.com/crew102/rapidraker). You can speed up `slowrake()` by ignoring the words' part-of-speech when creating candidate keywords (i.e., set `stop_pos = NULL`).
+`slowrake()` is written mostly in R and hence is slower than the Java-based implementation of RAKE provided in the [`rapidraker` R package](https://github.com/crew102/rapidraker). You can speed up `slowrake()` by ignoring the words' part-of-speech when creating candidate keywords (i.e., set `stop_pos = NULL`).
 
 ### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How do I fix this?
 
@@ -35,8 +35,8 @@ Each keyword's score is calculated by summing up the scores of all of its member
 
 ### 4. Sometimes the part-of-speech tagging done by `slowrake()` appears to be incorrect. What can I do about this?
 
-First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, you couuld try to use a different function for POS tagging. Note, `get_pos_tags()` is basically a wrapper around the POS tagging methods found in the `openNLP` and `NLP` packages, so you'll want to look outside those libraries for a different tagger.
+First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, you could try to use a different function for POS tagging. Note, `get_pos_tags()` is basically a wrapper around the POS tagging methods found in the `openNLP` and `NLP` packages, so you'll want to look outside those libraries for a different tagger.
 
-### 5. Why  am I getting different results from `slowaker::slowrake()` vs `rapidraker::rapidrake()`?
+### 5. Why am I getting different results from `slowraker` vs `rapidraker`?
 
-The two functions use different libraries for tokenization and stemming, which can lead to slightly different results, both in terms of the keywords that are identified as well as their scores.
+The two functions use different libraries for tokenization and stemming. This can lead to slightly different results in terms of which keywords are identified as well as what their scores are.

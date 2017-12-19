@@ -9,3 +9,15 @@ a {
 h2, h3 {
   border-bottom: 2px solid #668934;
 }
+
+.nav a, .nav code, #navbar a {
+  text-transform: none;
+}
+
+h2 code, h3 code {
+  background-color: transparent;
+}
+
+a[href="#performance-of-slowrake-vs-rapidrake"] {
+  padding: 10px 0;
+}
