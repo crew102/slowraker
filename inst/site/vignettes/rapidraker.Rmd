@@ -1,0 +1,105 @@
+---
+title: "rapidraker"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{rapidraker}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  progress = FALSE,
+  error = FALSE, 
+  message = FALSE,
+  warning = FALSE
+)
+options(width = 100, digits = 2)
+```
+
+## What is `rapidraker`?
+
+`rapidraker` is an R package that provides an implementation of the same keyword extraction algorithm (RAKE) that `slowraker` does. However, `rapidraker::rapidrake()` is written mostly in Java while `slowraker::slowrake()` is written mostly in R. This means that you can expect `rapidrake()` to be considerably faster than `slowrake()`.
+
+## Installation
+
+You can get the development version from GitHub:
+
+```r
+if (!require(devtools)) install.packages("devtools")
+
+devtools::install_github("crew102/rapidraker")
+```
+
+## Basic usage
+
+```{r, eval = FALSE}
+library(slowraker)
+library(rapidraker)
+
+data("dog_pubs")
+rakelist <- rapidrake(txt = dog_pubs$abstract[1:5])
+head(rbind_rakelist(rakelist))
+```
+
+```{r, echo = FALSE, results = "hide"}
+# Note, we have to split the vignette up like this so that it doesn't print 
+# the progress bar.
+library(slowraker)
+library(rapidraker)
+
+data("dog_pubs")
+rakelist <- rapidrake(txt = dog_pubs$abstract[1:5])
+```
+
+```{r, echo = FALSE}
+head(rbind_rakelist(rakelist))
+```
+
+## Performance of `slowrake()` vs `rapidrake()`:
+
+```{r, results = 'hide'}
+txt <- rep(dog_pubs$abstract, 20)
+
+sr_time <- system.time(slowrake(txt))[["elapsed"]]
+rr_time <- system.time(rapidrake(txt))[["elapsed"]]
+```
+
+In this example, `slowrake()` took `r sr_time` seconds to execute while `rapidrake()` took `r rr_time` seconds, suggesting that the Java implementation of RAKE was about `r round(sr_time / rr_time, 0)` times faster than the R version.
+
+## Making `rapidrake()` even faster
+
+Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn't take much code to parallelize `rapidrake()`:
+
+```{r}
+# The following simulations were run on an 8 core Windows machine
+library(parallel)
+library(doParallel)
+library(foreach)
+
+cores <- detectCores()
+# Make txt vector larger so we can more easily see the speed improvement of 
+# parallelization
+txt2 <- rep(txt, cores) 
+by <- floor(length(txt2) / cores)
+
+cl <- makeCluster(cores)
+registerDoParallel(cl)
+
+rr_par_time <- system.time(
+  foreach(i = 1:cores) %dopar% {
+    start <- (i - 1) * by + 1
+    finish <- start + by - 1
+    rapidraker::rapidrake(txt2[start:finish])
+  }
+)[["elapsed"]]
+
+stopCluster(cl)
+```
+
+The sequential version of `rapidrake()` took `r rr_time` seconds to extract keywords for `r length(txt)` documents, while the parallel version took `r rr_par_time` seconds to extract keywords for `r length(txt2)` documents. This suggests that the parallel version was about `r round(rr_time * cores / rr_par_time, 0)` times faster than the regular version.
