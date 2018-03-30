@@ -35,7 +35,7 @@ Each keyword's score is calculated by summing up the scores of all of its member
 
 ### 4. Sometimes the part-of-speech tagging done by `slowrake()` appears to be incorrect. What can I do about this?
 
-First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags(txt = "here is some text that I want tagged.")`. If the returned tags are indeed incorrect, you could try to use a different function for POS tagging. Note, `get_pos_tags()` is basically a wrapper around the POS tagging methods found in the `openNLP` and `NLP` packages, so you'll want to look outside those libraries for a different tagger.
+First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`) is indeed giving the wrong tags. To do that, try something like: `slowraker:::get_pos_tags("some text whose POS I want", word_token_annotator = openNLP::Maxent_Word_Token_Annotator(), pos_annotator = openNLP::Maxent_POS_Tag_Annotator())`. If the returned tags are indeed incorrect, you could try to use a different function for POS tagging. Note, `get_pos_tags()` is basically a wrapper around the POS tagging methods found in the `openNLP` and `NLP` packages, so you'll want to look outside those libraries for a different tagger.
 
 ### 5. Why am I getting different results from `slowraker` vs `rapidraker`?
 
