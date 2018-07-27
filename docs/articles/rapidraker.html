@@ -86,7 +86,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can get the stable version on CRAN:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"rapidraker"</span>)</code></pre></div>
-<p>The development version of the package requires you to compile the latest Java source code in <a href="https://github.com/crew102/rapidrake-java">rapidrake-java</a>, so it’s not as simple as making a call to <code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">devtools::install_github()</a></code>.</p>
+<p>The development version of the package requires you to compile the latest Java source code in <a href="https://github.com/crew102/rapidrake-java">rapidrake-java</a>, so installing it is not as simple as making a call to <code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">devtools::install_github()</a></code>.</p>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
@@ -111,13 +111,13 @@ rakelist &lt;-<span class="st"> </span><span class="kw">rapidrake</span>(<span c
 
 sr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw"><a href="../reference/slowrake.html">slowrake</a></span>(txt))[[<span class="st">"elapsed"</span>]]
 rr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw">rapidrake</span>(txt))[[<span class="st">"elapsed"</span>]]</code></pre></div>
-<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 82.68 seconds to execute while <code>rapidrake()</code> took 13.93 seconds, suggesting that the Java implementation of RAKE was about 6 times faster than the R version.</p>
+<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 88.67 seconds to execute while <code>rapidrake()</code> took 14.32 seconds, suggesting that the Java implementation of RAKE was about 6 times faster than the R version.</p>
 </div>
 <div id="making-rapidrake-even-faster" class="section level2">
 <h2 class="hasAnchor">
 <a href="#making-rapidrake-even-faster" class="anchor"></a>Making <code>rapidrake()</code> even faster</h2>
 <p>Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn’t take much code to parallelize <code>rapidrake()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The following simulations were run on an 8 core Windows machine</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The following code was run on an 8 core Windows 7 machine</span>
 <span class="kw">library</span>(parallel)
 <span class="kw">library</span>(doParallel)
 <span class="kw">library</span>(foreach)
@@ -140,7 +140,7 @@ rr_par_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(
 )[[<span class="st">"elapsed"</span>]]
 
 <span class="kw">stopCluster</span>(cl)</code></pre></div>
-<p>The sequential version of <code>rapidrake()</code> took 13.93 seconds to extract keywords for 600 documents, while the parallel version took 29.38 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 4 times faster than the regular version.</p>
+<p>The sequential version of <code>rapidrake()</code> took 14.32 seconds to extract keywords for 600 documents, while the parallel version took 31.86 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 4 times faster than the regular version.</p>
 </div>
 </div>
   </div>
