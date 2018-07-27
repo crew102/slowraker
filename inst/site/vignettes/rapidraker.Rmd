@@ -34,7 +34,7 @@ You can get the stable version on CRAN:
 install.packages("rapidraker")
 ```
 
-The development version of the package requires you to compile the latest Java source code in [rapidrake-java](https://github.com/crew102/rapidrake-java), so it's not as simple as making a call to  `devtools::install_github()`.
+The development version of the package requires you to compile the latest Java source code in [rapidrake-java](https://github.com/crew102/rapidrake-java), so installing it is not as simple as making a call to  `devtools::install_github()`.
 
 ## Basic usage
 
@@ -77,7 +77,7 @@ In this example, `slowrake()` took `r sr_time` seconds to execute while `rapidra
 Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn't take much code to parallelize `rapidrake()`:
 
 ```{r}
-# The following simulations were run on an 8 core Windows machine
+# The following code was run on an 8 core Windows 7 machine
 library(parallel)
 library(doParallel)
 library(foreach)
