@@ -172,7 +172,7 @@ final_txt <- paste(good_chunks, collapse = " ")
 ```{r}
 rakelist <- slowrake(final_txt)
 
-head(rakelist[[1]])
+kable(head(rakelist[[1]]))
 ```
 
 #### 5. Filter out bad keywords
