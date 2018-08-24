@@ -87,6 +87,11 @@ out_rake <- rbind_rakelist(rakelist, doc_id = patents$patent_number)
 out_rake
 ```
 
+```{r echo = FALSE}
+# not sure why, but rake progress bar is being suppressed in other chunks but isn't in the above chunk, so have to split it up like this
+out_rake
+```
+
 #### 3. Show each patent's top keyword
 
 ```{r}
