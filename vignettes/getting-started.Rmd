@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   progress = FALSE,
   error = FALSE, 
-  message = FALSE
+  message = FALSE,
+  rownames.print = FALSE
 )
 
 options(digits = 2)
