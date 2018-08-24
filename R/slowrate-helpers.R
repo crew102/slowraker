@@ -49,8 +49,8 @@ split_string <- function(txt, regex) {
 }
 
 get_cand_words <- function(txt, stop_words, phrase_delims) {
-  regex <- apend_split_txt(stop_words, phrase_delims = phrase_delims)
-  split_string(txt, regex = regex)
+  regex <- apend_split_txt(stop_words, phrase_delims)
+  split_string(txt, regex)
 }
 
 filter_words <- function(cand_words, word_min_char) {
@@ -67,13 +67,15 @@ gen_word_cnts <- function(cand_words) {
 }
 
 gen_degree <- function(wrd_cnts, cand_words) {
-  temp_score1 <- vapply(rownames(wrd_cnts), function(x)
-    sum(
-      vapply(cand_words, function(q)
-        ifelse(x %in% q, length(q) - 1, 0), numeric(1)
+  temp_score1 <- vapply(
+    rownames(wrd_cnts), function(x)
+      sum(
+        vapply(
+          cand_words, function(q) ifelse(x %in% q, length(q) - 1, 0), numeric(1)
+        )
       )
-    )
-  , numeric(1))
+    , numeric(1)
+  )
 
   temp_score1 + wrd_cnts[, 1]
 }
@@ -89,10 +91,10 @@ calc_keyword_scores <- function(cand_words) {
   # Get word counts for all distinct words
   wrd_cnts <- gen_word_cnts(cand_words)
   # Get word's degree score
-  degree <- gen_degree(wrd_cnts, cand_words = cand_words)
+  degree <- gen_degree(wrd_cnts, cand_words)
 
   # Get each word's score as per degree/frequency
-  word_scores <- calc_word_scores(wrd_cnts = wrd_cnts, degree = degree)
+  word_scores <- calc_word_scores(wrd_cnts, degree)
   # Add word scores for the words in each (non-distinct) keyword, to get
   # keyword scores
   unlist(lapply(cand_words, function(x) sum(word_scores[x])))

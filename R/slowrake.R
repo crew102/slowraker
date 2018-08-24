@@ -17,33 +17,25 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   if (!is.null(stop_pos)) {
     # Suggest how to solve an 'out of memory' Java error if it is thrown
     tryCatch(
-      pos_word_df <- get_pos_tags(
-        txt,
-        word_token_annotator = word_token_annotator,
-        pos_annotator = pos_annotator
-      ),
+      pos_word_df <- get_pos_tags(txt, word_token_annotator, pos_annotator),
       error = handle_pos_error
     )
-    txt <- stop_pos_tags(pos_word_df, stop_pos = stop_pos)
+    txt <- stop_pos_tags(pos_word_df, stop_pos)
   }
 
   txt <- tolower(txt)
   # Split txt into list of keywords based on stop words/phrase delims
-  cand_words <- get_cand_words(
-    txt, stop_words = stop_words, phrase_delims = phrase_delims
-  )
+  cand_words <- get_cand_words(txt, stop_words, phrase_delims)
   # Filter out words that are too short
-  cand_words <- filter_words(
-    cand_words, word_min_char = word_min_char
-  )
+  cand_words <- filter_words(cand_words, word_min_char)
 
   # Make sure we still have at least one keyword
   if (length(cand_words) == 0) return(NA)
 
   # Convert word vectors into keywords (a word vector contains the words in a
   # keyword)
-  keyword <- vapply(cand_words, function(x)
-    paste0(x, collapse = " "), character(1))
+  collapse <- function(x) paste0(x, collapse = " ")
+  keyword <- vapply(cand_words, collapse, character(1))
 
   if (stem) cand_words <- lapply(cand_words, SnowballC::wordStem)
 
@@ -58,8 +50,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 
   # Convert stemmed versions of word vectors into keywords
   if (stem)
-    keyword_df$stem <- vapply(cand_words, function(x)
-      paste0(x, collapse = " "), character(1))
+    keyword_df$stem <- vapply(cand_words, collapse, character(1))
 
   # Create output data frame
   process_keyword_df(keyword_df)
@@ -128,16 +119,16 @@ slowrake <- function(txt,
 
   num_docs <- length(txt)
   one_doc <- num_docs == 1
-  if (!one_doc)
-    prog_bar <- utils::txtProgressBar(min = 0, max = num_docs, style = 3)
-
-  all_out <- vector(mode = "list", length = num_docs)
 
   if (!is.null(stop_pos)) {
     pos_annotator <- openNLP::Maxent_POS_Tag_Annotator()
     word_token_annotator <- openNLP::Maxent_Word_Token_Annotator()
   }
 
+  if (!one_doc)
+    prog_bar <- utils::txtProgressBar(min = 0, max = num_docs, style = 3)
+
+  all_out <- vector(mode = "list", length = num_docs)
   for (i in seq_along(txt)) {
     all_out[[i]] <- slowrake_atomic(
       txt = txt[i],
@@ -152,8 +143,5 @@ slowrake <- function(txt,
     if (!one_doc) utils::setTxtProgressBar(prog_bar, i)
   }
 
-  structure(
-    all_out,
-    class = c(class(all_out), "rakelist")
-  )
+  structure(all_out, class = c(class(all_out), "rakelist"))
 }

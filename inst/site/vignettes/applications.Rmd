@@ -124,7 +124,7 @@ raw_txt <- pdf_text(destfile)
 # Helper function
 sub_all <- function(regex_vec, txt) {
   pattern <- paste0(regex_vec, collapse = "|")
-  gsub(pattern = pattern, replacement = " ", x = txt)
+  gsub(pattern, " ", txt)
 }
 
 txt1 <- 
@@ -137,7 +137,7 @@ remove1 <- "Acknowledgements.*"
 remove2 <- "TEXT MINING"
 remove3 <- "AUTOMATIC KEYWORD EXTRACTION"
 
-txt2 <- sub_all(c(remove1, remove2, remove3), txt = txt1)
+txt2 <- sub_all(c(remove1, remove2, remove3), txt1)
 ```
 
 #### 3. Detect and remove non-paragraphs
@@ -150,7 +150,7 @@ Most of the tables in this article have numbers in them. If we split the PDF int
 # Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart.
 remove4 <- "(Table|Figure) [[:digit:].]{1,}"
 remove5 <- "\\([12][[:digit:]]{3}\\)"
-txt3 <- sub_all(c(remove4, remove5), txt = txt2)
+txt3 <- sub_all(c(remove4, remove5), txt2)
 
 # Split text into chunks based on digit delimiter
 txt_chunks <- unlist(strsplit(txt3, "[[:digit:]]"))

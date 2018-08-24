@@ -34,12 +34,11 @@ rbind_rakelist <- function(rakelist, doc_id = NULL) {
     )
   }
 
-  num_rows <- vapply(rakelist, function(x)
-    if (is.data.frame(x)) nrow(x) else 1, numeric(1))
-
+  num_rows <- vapply(
+    rakelist, function(x) if (is.data.frame(x)) nrow(x) else 1, numeric(1)
+  )
   doc_id <- rep(doc_id, num_rows)
 
   df <- do.call("rbind", rakelist)
-
   cbind(doc_id, df, stringsAsFactors = FALSE, row.names = NULL)
 }
