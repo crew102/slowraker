@@ -9,11 +9,11 @@ vignette: >
 
 ### 1. Why is it called *slow*raker?
 
-`slowrake()` is written mostly in R and hence is slower than the Java-based implementation of RAKE provided in the [`rapidraker` R package](https://github.com/crew102/rapidraker). You can speed up `slowrake()` by ignoring the words' part-of-speech when creating candidate keywords (i.e., set `stop_pos = NULL`).
+`slowrake()` is written mostly in R and hence is slower than the Java-based implementation of RAKE found in the [`rapidraker` R package](https://github.com/crew102/rapidraker). You can speed up `slowrake()` by telling it not to use a word's part-of-speech (POS) when creating candidate keywords (i.e., set `stop_pos = NULL`).
 
 ### 2. `slowrake()` is erroring from some memory issue (*OutOfMemoryError*). How do I fix this?
 
-`slowrake()` relies on Java for part-of-speech (POS) tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an *OutOfMemoryError*. To fix this, try giving Java more memory:
+`slowrake()` relies on Java for POS tagging. Your Java virtual machine (JVM) may run out of memory during this process, resulting in an *OutOfMemoryError*. To fix this, try giving Java more memory:
 
 ```r
 options(java.parameters = "-Xmx1024m")
@@ -39,4 +39,4 @@ First, confirm that the tagging function used by `slowrake()` (`get_pos_tags()`)
 
 ### 5. Why am I getting different results from `slowraker` vs `rapidraker`?
 
-The two functions use different libraries for tokenization and stemming. This can lead to slightly different results in terms of which keywords are identified as well as what their scores are.
+The two functions use different libraries for tokenization and stemming. This can lead to slightly different results in terms of the keywords that identified as well as the scores that they are given.

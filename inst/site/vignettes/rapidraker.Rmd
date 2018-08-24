@@ -29,13 +29,13 @@ options(width = 100, digits = 2)
 
 ## Installation
 
-You can get the stable version on CRAN:
+You can get the stable version from CRAN:
 
 ```r
 install.packages("rapidraker")
 ```
 
-The development version of the package requires you to compile the latest Java source code in [rapidrake-java](https://github.com/crew102/rapidrake-java), so installing it is not as simple as making a call to  `devtools::install_github()`.
+The development version of the package requires you to compile the latest Java source code in [rapidrake-java](https://github.com/crew102/rapidrake-java), so installing it is not as simple as making a call to `devtools::install_github()`.
 
 ## Basic usage
 
@@ -71,11 +71,11 @@ sr_time <- system.time(slowrake(txt))[["elapsed"]]
 rr_time <- system.time(rapidrake(txt))[["elapsed"]]
 ```
 
-In this example, `slowrake()` took `r sr_time` seconds to execute while `rapidrake()` took `r rr_time` seconds, suggesting that the Java implementation of RAKE was about `r round(sr_time / rr_time, 0)` times faster than the R version.
+In this example, `slowrake()` took `r sr_time` seconds to execute while `rapidrake()` took `r rr_time` seconds. In other words, `rapidrake()` was about `r round(sr_time / rr_time, 0)` times faster than `slowrake()`.
 
 ## Making `rapidrake()` even faster
 
-Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn't take much code to parallelize `rapidrake()`:
+Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn't take much to parallelize `rapidrake()`:
 
 ```{r}
 # The following code was run on an 8 core Windows 7 machine
@@ -84,8 +84,7 @@ library(doParallel)
 library(foreach)
 
 cores <- detectCores()
-# Make txt vector larger so we can more easily see the speed improvement of 
-# parallelization
+# Make txt vector larger so we can more easily see the speed improvement of parallelization
 txt2 <- rep(txt, cores) 
 by <- floor(length(txt2) / cores)
 

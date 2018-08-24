@@ -27,13 +27,13 @@ options(digits = 2)
 
 The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) as a way to quickly extract keywords from documents. The algorithm involves two main steps:
 
-**1. Candidate keywords are identified.** A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn't contain a phrase delimiter or stop word.[^1] A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
+**1. Candidate keywords are identified.** A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn't contain a phrase delimiter or a stop word.[^1] A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or a comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
 
 > RAKE is based on our observation that keywords frequently contain multiple words but rarely contain standard punctuation or stop words, such as the function words *and*, *the*, and *of*, or other words with minimal lexical meaning
 
-In addition to using stop words and phrase delimiters to identify the candidate keywords, you can also use a word's part-of-speech (POS). For example, most keywords don't contain verbs, so you may want treat verbs as if they were stop words. You can use `slowrake()`'s `stop_pos` parameter to choose which parts-of-speech to exclude from your candidate keywords.
+In addition to using stop words and phrase delimiters to identify candidate keywords, `slowrake()` also allows you to use a word's part-of-speech (POS) to mark it as a potential delimiter. For example, most keywords don't contain verbs, so you may want treat verbs as phrase delimiters. You can use `slowrake()`'s `stop_pos` parameter to choose which parts-of-speech to exclude from your candidate keywords.
 
-**2. Keywords get scored** A keyword's score (i.e., its degree of "keywordness") is the sum of its *member word* (token) scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A member word's score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with another word in another keyword, and frequency is the total number of times that the word occurs overall (i.e., including keywords that only have one member word, like "dog").
+**2. Keywords get scored** A keyword's score (i.e., its degree of "keywordness") is the sum of its *member word* scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A member word's score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with another word in another keyword, and frequency is the total number of times that the word occurs overall (i.e., including keywords that only have one member word, like "dog").
 
 See [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) for more details on how RAKE works. 
 
@@ -67,7 +67,7 @@ slowrake(txt, stop_words = c(smart_words, "diophantine"))[[1]]
 slowrake(txt, stop_pos = NULL)[[1]]
 ```
 
-* Consider words that aren't nouns to be stop words:
+* Consider any word that isn't a noun to be a stop word:
 ```{r}
 slowrake(txt, stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)])[[1]]
 ```
@@ -84,4 +84,4 @@ res2[order(res2$freq, decreasing = TRUE), ]
 slowrake(txt = dog_pubs$abstract[1:10])
 ```
 
-[^1]: Technically the original version of RAKE allows some keywords to contain stop words, but `slowrake()` does not have this capability.
+[^1]: Technically the original version of RAKE allows some keywords to contain stop words, but `slowrake()` doesn't support this.

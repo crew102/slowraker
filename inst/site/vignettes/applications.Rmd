@@ -44,14 +44,14 @@ library(knitr)
 # The webpage of interest - slowraker's "Getting started" page
 url <- "https://crew102.github.io/slowraker/articles/getting-started.html"
 
-GET(url = url) %>% # Download the source
+GET(url) %>% 
   content("text") %>% 
   read_html() %>% 
-  xml_find_all(".//p") %>% # Extract text from paragraph nodes
+  xml_find_all(".//p") %>% 
   xml_text() %>% 
-  paste(collapse = " ") %>% # Paste paragraphs together
+  paste(collapse = " ") %>%
   iconv(from = "UTF-8", "ASCII", sub = '"') %>% 
-  slowrake() %>% # Run RAKE
+  slowrake() %>%
   .[[1]]
 ```
 
@@ -60,11 +60,12 @@ GET(url = url) %>% # Download the source
 #### 1. Download patent data
 
 ```{r}
-# Download data for patents that are related to "keyword extraction" from the PatentsView API.
+# Download data from the PatentsView API for 10 patents with the phrase
+# "keyword extraction" in their abstracts
 pv_data <- search_pv(
   query = qry_funs$text_phrase(patent_abstract = "keyword extraction"),
   fields = c("patent_number", "patent_title", "patent_abstract"),
-  all_pages = TRUE
+  per_page = 10
 )
 
 # Look at the data
@@ -78,16 +79,12 @@ kable(head(patents, n = 2))
 rakelist <- slowrake(
   patents$patent_abstract,
   stop_words = c("method", smart_words), # Consider "method" to be a stop word
-  stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)] # Only use words that are nouns
+  stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)] # Consider all non-nouns to be stop words
 )
 
 # Create a single data frame with all patents' keywords
 out_rake <- rbind_rakelist(rakelist, doc_id = patents$patent_number)
-head(out_rake)
-```
-
-```{r, echo = FALSE}
-head(out_rake)
+out_rake
 ```
 
 #### 3. Show each patent's top keyword
@@ -121,7 +118,7 @@ raw_txt <- pdf_text(destfile)
 #### 2. Apply basic text cleaning 
 
 ```{r}
-# Helper function
+# Helper function for text removal
 sub_all <- function(regex_vec, txt) {
   pattern <- paste0(regex_vec, collapse = "|")
   gsub(pattern, " ", txt)
@@ -140,14 +137,14 @@ remove3 <- "AUTOMATIC KEYWORD EXTRACTION"
 txt2 <- sub_all(c(remove1, remove2, remove3), txt1)
 ```
 
-#### 3. Detect and remove non-paragraphs
+#### 3. Detect and remove tables
 
-There are some sections of the PDF's text that we don't want to run RAKE on, such as the text found in tables. The problem with tables is that the text inside them usually doesn't contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. However, it's difficult to determine which parts of the PDF correspond to tables, let alone parse the cells out.[^1] We would therefore like to determine which sections of the text are likely to be tables, so that these sections can be removed. 
+There are some sections of the PDF's text that we don't want to run RAKE on, such as the text found in tables. The problem with tables is that they usually don't contain typical phrase delimiters (e.g., periods and commas). Instead, the cell of the table acts as a sort of delimiter. It can be very difficult to parse a table's cells out in a PDF document, though, so we'll just try to identify/remove the tables themselves.[^1] 
 
-Most of the tables in this article have numbers in them. If we split the PDF into text chunks using a digit delimiter, it's likely that most of a table's text will end up in a relatively small-sized chunk. We can then filter out these small chunks, leaving us with the paragraphs. 
+The tables in this article mostly contain numbers. If we split the article into text chunks using a digit delimiter, it's likely that most of a table's chunks will be relatively small in size. We can use this fact to help us identify which text chunks correspond to tables and which correspond to paragraphs. 
 
 ```{r}
-# Numbers generally appear in paragraphs in two forms in this article: 1) When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and 2) When the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split apart.
+# Numbers generally appear in paragraphs in two ways in this article: When the authors refer to results in a specific table/figure (e.g., "the sample abstract shown in Figure 1.1"), and when the authors reference another article (e.g., "Andrade and Valencia (1998) base their approach"). Remove these instances so that paragraphs don't get split into small chunks, which would make them hard to tell apart from tables.
 remove4 <- "(Table|Figure) [[:digit:].]{1,}"
 remove5 <- "\\([12][[:digit:]]{3}\\)"
 txt3 <- sub_all(c(remove4, remove5), txt2)
@@ -155,10 +152,10 @@ txt3 <- sub_all(c(remove4, remove5), txt2)
 # Split text into chunks based on digit delimiter
 txt_chunks <- unlist(strsplit(txt3, "[[:digit:]]"))
 
-# Count alpha chars in each chunk
+# Use number of alpha chars found in a chunk as an indicator of its size
 num_alpha <- str_count(txt_chunks, "[[:alpha:]]")
 
-# Use kmeans to determine what a paragraph's minimum char count should be
+# Use kmeans to distinguish tables from paragraphs
 clust <- kmeans(num_alpha, centers = 2)
 good_clust <- which(max(clust$centers) == clust$centers)
 
@@ -177,14 +174,14 @@ kable(head(rakelist[[1]]))
 
 #### 5. Filter out bad keywords
 
-The fact that some of the keywords shown above are very long suggests we missed something in Step 4. It turns out that our method mistook one of the tables for a paragraph (Table 1.1 shown below). Table 1.1 is somewhat atypical in that it doesn't contain any numbers, and thus it makes sense that our method missed it. 
+The fact that some of the keywords shown above are very long suggests we missed something in Step 4. It turns out that our method mistook one of the tables (Table 1.1 shown below) for a paragraph. Table 1.1 is somewhat atypical in that it doesn't contain any numbers, and thus it makes sense that our method missed it. 
 
 ![](table-1-1.png)
 
-To clean up the results, let's apply an ad hoc filter on the keywords. This filter removes keywords whose long length indicates that a phrase run-on has occurred, and hence the keyword is no good.
+To clean up the results, let's apply an ad hoc filter on the keywords. This filter will remove keywords whose long length indicates that a phrase run-on has occurred, and hence the keyword is no good.
 
 ```{r}
-# Function to remove keywords that occur only once and have more than max_word_cnt constituent words
+# Function to remove keywords that occur only once and have more than max_word_cnt member words
 filter.rakelist <- function(x, max_word_cnt = 3) {
   structure(
     lapply(x, function(r) {
@@ -201,4 +198,4 @@ filter <- function(x) UseMethod("filter")
 filter(rakelist)[[1]]
 ```
 
-[^1]: There are better solutions to identifying tables in PDFs than the one I use here (e.g., the [tabula](https://github.com/tabulapdf/tabula-java/) Java library and its corresponding R wrapper, [tabulizer](https://github.com/ropensci/tabulizer#installation)).
+[^1]: There are better solutions for identifying and parsing tables in PDFs than the one I use here (e.g., the [tabula](https://github.com/tabulapdf/tabula-java/) Java library and its corresponding R wrapper, [tabulizer](https://github.com/ropensci/tabulizer#installation)).
