@@ -50,7 +50,7 @@ GET(url = url) %>% # Download the source
   xml_find_all(".//p") %>% # Extract text from paragraph nodes
   xml_text() %>% 
   paste(collapse = " ") %>% # Paste paragraphs together
-  iconv(from = "UTF-8", "ASCII", sub = "'") %>% # slowraker doesn't support non-ASCII phrase delimiters yet (e.g., "“dog leash”")
+  iconv(from = "UTF-8", "ASCII", sub = '"') %>% 
   slowrake() %>% # Run RAKE
   .[[1]]
 ```
