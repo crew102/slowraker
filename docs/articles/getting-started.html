@@ -80,12 +80,12 @@
 <h2 class="hasAnchor">
 <a href="#what-is-the-rake-algorithm" class="anchor"></a>What is the RAKE algorithm?</h2>
 <p>The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in <a href="http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf">Rose et al.</a> as a way to quickly extract keywords from documents. The algorithm involves two main steps:</p>
-<p><strong>1. Candidate keywords are identified.</strong> A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn’t contain a phrase delimiter or stop word.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:</p>
+<p><strong>1. Candidate keywords are identified.</strong> A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn’t contain a phrase delimiter or a stop word.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or a comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:</p>
 <blockquote>
 <p>RAKE is based on our observation that keywords frequently contain multiple words but rarely contain standard punctuation or stop words, such as the function words <em>and</em>, <em>the</em>, and <em>of</em>, or other words with minimal lexical meaning</p>
 </blockquote>
-<p>In addition to using stop words and phrase delimiters to identify the candidate keywords, you can also use a word’s part-of-speech (POS). For example, most keywords don’t contain verbs, so you may want treat verbs as if they were stop words. You can use <code><a href="../reference/slowrake.html">slowrake()</a></code>’s <code>stop_pos</code> parameter to choose which parts-of-speech to exclude from your candidate keywords.</p>
-<p><strong>2. Keywords get scored</strong> A keyword’s score (i.e., its degree of “keywordness”) is the sum of its <em>member word</em> (token) scores. For example, the score for the keyword “dog leash” is calculated by adding the score for the word “dog” with the score for the word “leash.” A member word’s score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with another word in another keyword, and frequency is the total number of times that the word occurs overall (i.e., including keywords that only have one member word, like “dog”).</p>
+<p>In addition to using stop words and phrase delimiters to identify candidate keywords, <code><a href="../reference/slowrake.html">slowrake()</a></code> also allows you to use a word’s part-of-speech (POS) to mark it as a potential delimiter. For example, most keywords don’t contain verbs, so you may want treat verbs as phrase delimiters. You can use <code><a href="../reference/slowrake.html">slowrake()</a></code>’s <code>stop_pos</code> parameter to choose which parts-of-speech to exclude from your candidate keywords.</p>
+<p><strong>2. Keywords get scored</strong> A keyword’s score (i.e., its degree of “keywordness”) is the sum of its <em>member word</em> scores. For example, the score for the keyword “dog leash” is calculated by adding the score for the word “dog” with the score for the word “leash.” A member word’s score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with another word in another keyword, and frequency is the total number of times that the word occurs overall (i.e., including keywords that only have one member word, like “dog”).</p>
 <p>See <a href="http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf">Rose et al.</a> for more details on how RAKE works.</p>
 </div>
 <div id="examples" class="section level2">
@@ -132,7 +132,7 @@ txt &lt;-<span class="st"> "Compatibility of systems of linear constraints over 
   </script>
 </div>
 <ul>
-<li>Consider words that aren’t nouns to be stop words:</li>
+<li>Consider any word that isn’t a noun to be a stop word:</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/slowrake.html">slowrake</a></span>(txt, <span class="dt">stop_pos =</span> pos_tags<span class="op">$</span>tag[<span class="op">!</span><span class="kw">grepl</span>(<span class="st">"^N"</span>, pos_tags<span class="op">$</span>tag)])[[<span class="dv">1</span>]]</code></pre></div>
 <div data-pagedtable="false">
@@ -148,7 +148,7 @@ res2 &lt;-<span class="st"> </span><span class="kw">aggregate</span>(freq <span 
 res2[<span class="kw">order</span>(res2<span class="op">$</span>freq, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>), ]</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["keyword"],"name":[1],"type":["chr"],"align":["left"]},{"label":["stem"],"name":[2],"type":["chr"],"align":["left"]},{"label":["freq"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"systems","2":"system","3":"4","_rn_":"19"},{"1":"solutions","2":"solut","3":"3","_rn_":"16"},{"1":"algorithms","2":"algorithm","3":"2","_rn_":"1"},{"1":"compatibility","2":"compat","3":"2","_rn_":"2"},{"1":"criteria","2":"criteria","3":"2","_rn_":"5"},{"1":"types","2":"type","3":"2","_rn_":"20"},{"1":"components","2":"compon","3":"1","_rn_":"3"},{"1":"construction","2":"construct","3":"1","_rn_":"4"},{"1":"linear constraints","2":"linear constraint","3":"1","_rn_":"6"},{"1":"linear diophantine equations","2":"linear diophantin equat","3":"1","_rn_":"7"},{"1":"minimal","2":"minim","3":"1","_rn_":"8"},{"1":"minimal set","2":"minim set","3":"1","_rn_":"9"},{"1":"minimal supporting set","2":"minim support set","3":"1","_rn_":"10"},{"1":"mixed types","2":"mix type","3":"1","_rn_":"11"},{"1":"natural numbers","2":"natur number","3":"1","_rn_":"12"},{"1":"nonstrict inequations","2":"nonstrict inequ","3":"1","_rn_":"13"},{"1":"set","2":"set","3":"1","_rn_":"14"},{"1":"sets","2":"set","3":"1","_rn_":"15"},{"1":"strict inequations","2":"strict inequ","3":"1","_rn_":"17"},{"1":"system","2":"system","3":"1","_rn_":"18"},{"1":"upper","2":"upper","3":"1","_rn_":"21"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["keyword"],"name":[1],"type":["chr"],"align":["left"]},{"label":["stem"],"name":[2],"type":["chr"],"align":["left"]},{"label":["freq"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"systems","2":"system","3":"4"},{"1":"solutions","2":"solut","3":"3"},{"1":"algorithms","2":"algorithm","3":"2"},{"1":"compatibility","2":"compat","3":"2"},{"1":"criteria","2":"criteria","3":"2"},{"1":"types","2":"type","3":"2"},{"1":"components","2":"compon","3":"1"},{"1":"construction","2":"construct","3":"1"},{"1":"linear constraints","2":"linear constraint","3":"1"},{"1":"linear diophantine equations","2":"linear diophantin equat","3":"1"},{"1":"minimal","2":"minim","3":"1"},{"1":"minimal set","2":"minim set","3":"1"},{"1":"minimal supporting set","2":"minim support set","3":"1"},{"1":"mixed types","2":"mix type","3":"1"},{"1":"natural numbers","2":"natur number","3":"1"},{"1":"nonstrict inequations","2":"nonstrict inequ","3":"1"},{"1":"set","2":"set","3":"1"},{"1":"sets","2":"set","3":"1"},{"1":"strict inequations","2":"strict inequ","3":"1"},{"1":"system","2":"system","3":"1"},{"1":"upper","2":"upper","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <ul>
@@ -195,7 +195,7 @@ res2[<span class="kw">order</span>(res2<span class="op">$</span>freq, <span clas
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Technically the original version of RAKE allows some keywords to contain stop words, but <code><a href="../reference/slowrake.html">slowrake()</a></code> does not have this capability.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>Technically the original version of RAKE allows some keywords to contain stop words, but <code><a href="../reference/slowrake.html">slowrake()</a></code> doesn’t support this.<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
 </div>
