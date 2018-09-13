@@ -111,7 +111,7 @@ rakelist &lt;-<span class="st"> </span><span class="kw">rapidrake</span>(<span c
 
 sr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw"><a href="../reference/slowrake.html">slowrake</a></span>(txt))[[<span class="st">"elapsed"</span>]]
 rr_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(<span class="kw">rapidrake</span>(txt))[[<span class="st">"elapsed"</span>]]</code></pre></div>
-<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 90.85 seconds to execute while <code>rapidrake()</code> took 15.07 seconds. In other words, <code>rapidrake()</code> was about 6 times faster than <code><a href="../reference/slowrake.html">slowrake()</a></code>.</p>
+<p>In this example, <code><a href="../reference/slowrake.html">slowrake()</a></code> took 86.85 seconds to execute while <code>rapidrake()</code> took 14.4 seconds. In other words, <code>rapidrake()</code> was about 6 times faster than <code><a href="../reference/slowrake.html">slowrake()</a></code>.</p>
 </div>
 <div id="making-rapidrake-even-faster" class="section level2">
 <h2 class="hasAnchor">
@@ -139,7 +139,7 @@ rr_par_time &lt;-<span class="st"> </span><span class="kw">system.time</span>(
 )[[<span class="st">"elapsed"</span>]]
 
 <span class="kw">stopCluster</span>(cl)</code></pre></div>
-<p>The sequential version of <code>rapidrake()</code> took 15.07 seconds to extract keywords for 600 documents, while the parallel version took 30.97 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 4 times faster than the regular version.</p>
+<p>The sequential version of <code>rapidrake()</code> took 14.4 seconds to extract keywords for 600 documents, while the parallel version took 30.97 seconds to extract keywords for 4800 documents. This suggests that the parallel version was about 4 times faster than the regular version.</p>
 </div>
 </div>
   </div>

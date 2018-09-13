@@ -85,7 +85,7 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 #'   so you should consider the full length of the word and not the length of
 #'   its stem when choosing \code{word_min_char}.
 #' @param stem Do you want to stem the words before running RAKE?
-#' @param phrase_delims A regular expression containing the characters that
+#' @param phrase_delims A regular expression containing the patterns that
 #' will be used as phrase delimiters.
 #'
 #' @return An object of class \code{rakelist}, which is just a list of data
