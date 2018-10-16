@@ -59,6 +59,10 @@ filter_words <- function(cand_words, word_min_char) {
   temp_vec[vapply(temp_vec, length, numeric(1)) > 0]
 }
 
+split_hyphenated_words <- function(cand_words) {
+  lapply(cand_words, function(x) unlist(strsplit(x, "-")))
+}
+
 gen_word_cnts <- function(cand_words) {
   # Get a list of unique words in each keyword so we don't double count (e.g.,
   # don't double count "vector" in "vector times vector").

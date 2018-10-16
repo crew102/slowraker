@@ -24,10 +24,17 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   }
 
   txt <- tolower(txt)
+
   # Split txt into list of keywords based on stop words/phrase delims
   cand_words <- get_cand_words(txt, stop_words, phrase_delims)
   # Filter out words that are too short
   cand_words <- filter_words(cand_words, word_min_char)
+  # drop dashes. have to do this at this point instead of sooner b/c we want to
+  # apply min word length filter on the complete hyphenated word, not on each
+  # component word. note: we are still limited by fact that single letters are
+  # in list of stopwords and r thinks that - is a word boundary, so the "k" in
+  # "k-means" will be dropped.
+  cand_words <- split_hyphenated_words(cand_words)
 
   # Make sure we still have at least one keyword
   if (length(cand_words) == 0) return(NA)

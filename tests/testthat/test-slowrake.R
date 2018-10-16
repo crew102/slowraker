@@ -47,3 +47,8 @@ test_that("phrase_delims works as expected", {
   )
   expect_true(grepl(",", out[[1]][1]))
 })
+
+test_that("hyphenated words are split apart", {
+  out <- slowrake("i love computer-generated images")
+  expect_true("computer generated images" %in% out[[1]]$keyword)
+})
