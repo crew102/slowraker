@@ -6,7 +6,7 @@
 \usage{
 slowrake(txt, stop_words = smart_words, stop_pos = c("VB", "VBD", "VBG",
   "VBN", "VBP", "VBZ"), word_min_char = 3, stem = TRUE,
-  phrase_delims = "[[:space:]]-[[:space:]]|[,.?():;\\"!/]")
+  phrase_delims = "[[:space:]]-[[:space:]]|[,.?():;\\"!/]|]|\\\\[")
 }
 \arguments{
 \item{txt}{A character vector, where each element of the vector contains the
