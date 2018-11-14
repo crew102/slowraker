@@ -60,7 +60,11 @@ filter_words <- function(cand_words, word_min_char) {
 }
 
 split_hyphenated_words <- function(cand_words) {
-  lapply(cand_words, function(x) unlist(strsplit(x, "-")))
+  lapply(cand_words, function(x) {
+    split <- strsplit(x, "-")
+    vec <- unlist(split)
+    vec[vec != ""]
+  })
 }
 
 gen_word_cnts <- function(cand_words) {

@@ -52,3 +52,8 @@ test_that("hyphenated words are split apart", {
   out <- slowrake("i love computer-generated images")
   expect_true("computer generated images" %in% out[[1]]$keyword)
 })
+
+test_that("hyphen split doesn't result in NA scores", {
+  out <- slowrake("all-dielectric metameterial")
+  expect_true(!is.na(out[[1]]$score))
+})
