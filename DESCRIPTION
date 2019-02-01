@@ -11,7 +11,7 @@ Encoding: UTF-8
 LazyData: TRUE
 Depends: R (>= 3.1)
 Imports: SnowballC, NLP, openNLP, utils
-Suggests: testthat, knitr, rmarkdown
+Suggests: testthat, knitr, rmarkdown, covr
 SystemRequirements: Java (>= 5.0)
 RoxygenNote: 6.0.1.9000
 VignetteBuilder: knitr
