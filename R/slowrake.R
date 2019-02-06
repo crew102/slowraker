@@ -1,21 +1,13 @@
 # Although all of the code in slowrake_atomic is vectorized (and thus could be
 # applied to a vector of txt instead of an element of txt), we still use a for
 # loop so we can see progress of slowrake.
-#
-# Comments refer to tokens as words (e.g., "hi" is a word) and refer to
-# contiguous sequences of tokens (i.e., phrases) as keywords (e.g., "hi there"
-# could be a keyword).
 slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
                             word_token_annotator, pos_annotator, phrase_delims) {
-  # Make sure there is at least one phrase delimitor in the txt
   txt <- paste0(txt, ".")
 
-  # Make sure there is an alpha char in text before filtering based on POS
   if (!grepl("[[:alpha:]]", txt)) return(NA)
 
-  # Remove words based on their POS
   if (!is.null(stop_pos)) {
-    # Suggest how to solve an 'out of memory' Java error if it is thrown
     tryCatch(
       pos_word_df <- get_pos_tags(txt, word_token_annotator, pos_annotator),
       error = handle_pos_error
@@ -24,11 +16,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   }
 
   txt <- tolower(txt)
-
-  # Split txt into list of keywords based on stop words/phrase delims
   cand_words <- get_cand_words(txt, stop_words, phrase_delims)
-  # Filter out words that are too short
   cand_words <- filter_words(cand_words, word_min_char)
+
   # drop dashes. have to do this at this point instead of sooner b/c we want to
   # apply min word length filter on the complete hyphenated word, not on each
   # component word. note: we are still limited by fact that single letters are
@@ -36,7 +26,6 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
   # "k-means" will be dropped.
   cand_words <- split_hyphenated_words(cand_words)
 
-  # Make sure we still have at least one keyword
   if (length(cand_words) == 0) return(NA)
 
   # Convert word vectors into keywords (a word vector contains the words in a
@@ -46,7 +35,6 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
 
   if (stem) cand_words <- lapply(cand_words, SnowballC::wordStem)
 
-  # Calculate keyword scores
   score <- calc_keyword_scores(cand_words)
 
   keyword_df <- data.frame(
@@ -55,11 +43,9 @@ slowrake_atomic <- function(txt, stop_words, word_min_char, stem, stop_pos,
     stringsAsFactors = FALSE
   )
 
-  # Convert stemmed versions of word vectors into keywords
   if (stem)
     keyword_df$stem <- vapply(cand_words, collapse, character(1))
 
-  # Create output data frame
   process_keyword_df(keyword_df)
 }
 

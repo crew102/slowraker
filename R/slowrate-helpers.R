@@ -28,7 +28,6 @@ handle_pos_error <- function(c_obj) {
 
 stop_pos_tags <- function(pos_word_df, stop_pos) {
   in_stop_pos <- pos_word_df$pos %in% stop_pos
-  # Replace unwanted words (based on POS) with a phrase delim (.):
   pos_word_df$word[in_stop_pos] <- "."
   paste(pos_word_df$word, collapse = " ")
 }
@@ -90,21 +89,15 @@ gen_degree <- function(wrd_cnts, cand_words) {
 
 calc_word_scores <- function(wrd_cnts, degree) {
   structure(
-    degree / wrd_cnts, # degree / freq
+    degree / wrd_cnts,
     names = rownames(wrd_cnts)
   )
 }
 
 calc_keyword_scores <- function(cand_words) {
-  # Get word counts for all distinct words
   wrd_cnts <- gen_word_cnts(cand_words)
-  # Get word's degree score
   degree <- gen_degree(wrd_cnts, cand_words)
-
-  # Get each word's score as per degree/frequency
   word_scores <- calc_word_scores(wrd_cnts, degree)
-  # Add word scores for the words in each (non-distinct) keyword, to get
-  # keyword scores
   unlist(lapply(cand_words, function(x) sum(word_scores[x])))
 }
 
