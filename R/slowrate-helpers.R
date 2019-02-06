@@ -66,14 +66,13 @@ split_hyphenated_words <- function(cand_words) {
   })
 }
 
-gen_word_cnts <- function(cand_words) {
+calc_keyword_scores <- function(cand_words) {
   # Get a list of unique words in each keyword so we don't double count (e.g.,
   # don't double count "vector" in "vector times vector").
   unq_wrds <- unlist(lapply(cand_words, unique))
-  as.matrix(table(unq_wrds))
-}
 
-gen_degree <- function(wrd_cnts, cand_words) {
+  wrd_cnts <- as.matrix(table(unq_wrds))
+
   temp_score1 <- vapply(
     rownames(wrd_cnts), function(x)
       sum(
@@ -84,20 +83,9 @@ gen_degree <- function(wrd_cnts, cand_words) {
     , numeric(1)
   )
 
-  temp_score1 + wrd_cnts[, 1]
-}
+  degree <- temp_score1 + wrd_cnts[, 1]
 
-calc_word_scores <- function(wrd_cnts, degree) {
-  structure(
-    degree / wrd_cnts,
-    names = rownames(wrd_cnts)
-  )
-}
-
-calc_keyword_scores <- function(cand_words) {
-  wrd_cnts <- gen_word_cnts(cand_words)
-  degree <- gen_degree(wrd_cnts, cand_words)
-  word_scores <- calc_word_scores(wrd_cnts, degree)
+  word_scores <- structure(degree / wrd_cnts, names = rownames(wrd_cnts))
   unlist(lapply(cand_words, function(x) sum(word_scores[x])))
 }
 
