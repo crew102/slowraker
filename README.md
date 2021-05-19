@@ -3,7 +3,11 @@ slowraker
 
 > A slow version of the Rapid Automatic Keyword Extraction (RAKE) algorithm
 
-[![Linux Build Status](https://travis-ci.org/crew102/slowraker.svg?branch=master)](https://travis-ci.org/crew102/slowraker) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/2ycx1m182va333ye?svg=true)](https://ci.appveyor.com/project/crew102/slowraker) [![CRAN version](http://www.r-pkg.org/badges/version/slowraker)](https://cran.r-project.org/package=slowraker) [![Coverage status](https://codecov.io/gh/crew102/slowraker/branch/master/graph/badge.svg)](https://codecov.io/github/crew102/slowraker?branch=master)
+[![R-CMD-check](https://github.com/crew102/slowraker/workflows/R-CMD-check/badge.svg)](https://github.com/crew102/slowraker/actions)
+[![CRAN
+version](http://www.r-pkg.org/badges/version/slowraker)](https://cran.r-project.org/package=slowraker)
+[![Coverage
+status](https://codecov.io/gh/crew102/slowraker/branch/master/graph/badge.svg)](https://codecov.io/github/crew102/slowraker?branch=master)
 
 Installation
 ------------
