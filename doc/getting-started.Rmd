@@ -1,0 +1,87 @@
+---
+title: "Getting started"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  progress = FALSE,
+  error = FALSE, 
+  message = FALSE,
+  rownames.print = FALSE
+)
+
+options(digits = 2)
+```
+
+## What is the RAKE algorithm?
+
+The Rapid Automatic Keyword Extraction (RAKE) algorithm was first described in [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) as a way to quickly extract keywords from documents. The algorithm involves two main steps:
+
+**1. Candidate keywords are identified.** A candidate keyword is any set of contiguous words (i.e., any n-gram) that doesn't contain a phrase delimiter or a stop word.[^1] A phrase delimiter is a punctuation character that marks the beginning or end of a phrase (e.g., a period or a comma). Splitting up text based on phrase delimiters/stop words is the essential idea behind RAKE. According to the authors:
+
+> RAKE is based on our observation that keywords frequently contain multiple words but rarely contain standard punctuation or stop words, such as the function words *and*, *the*, and *of*, or other words with minimal lexical meaning
+
+In addition to using stop words and phrase delimiters to identify candidate keywords, `slowrake()` also allows you to use a word's part-of-speech (POS) to mark it as a potential delimiter. For example, most keywords don't contain verbs, so you may want treat verbs as phrase delimiters. You can use `slowrake()`'s `stop_pos` parameter to choose which parts-of-speech to exclude from your candidate keywords.
+
+**2. Keywords get scored** A keyword's score (i.e., its degree of "keywordness") is the sum of its *member word* scores. For example, the score for the keyword "dog leash" is calculated by adding the score for the word "dog" with the score for the word "leash." A member word's score is equal to its degree/frequency, where degree equals the number of times that the word co-occurs with another word in another keyword, and frequency is the total number of times that the word occurs overall (i.e., including keywords that only have one member word, like "dog").
+
+See [Rose et al.](http://media.wiley.com/product_data/excerpt/22/04707498/0470749822.pdf) for more details on how RAKE works. 
+
+## Examples
+
+RAKE is unique in that it is completely unsupervised, so it's relatively quick to get started with. Let's take a look at a few examples that demonstrate `slowrake()`'s parameters.
+
+```{r}
+library(slowraker)
+
+txt <- "Compatibility of systems of linear constraints over the set of natural numbers. Criteria of compatibility of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating sets of solutions for all types of systems are given. These criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can be used in solving all the considered types of systems and systems of mixed types."
+```
+
+* Use the default settings:
+```{r}
+slowrake(txt)[[1]]
+```
+
+* Don't stem keywords before scoring them: 
+```{r}
+slowrake(txt, stem = FALSE)[[1]]
+```
+
+* Add the word "diophantine" to the default set of stop words (default set = `slowraker::smart_words`):
+```{r}
+slowrake(txt, stop_words = c(smart_words, "diophantine"))[[1]]
+```
+
+* Don't use a word's part-of-speech to determine if it's a stop word:
+```{r}
+slowrake(txt, stop_pos = NULL)[[1]]
+```
+
+* Consider any word that isn't a noun to be a stop word:
+```{r}
+slowrake(txt, stop_pos = pos_tags$tag[!grepl("^N", pos_tags$tag)])[[1]]
+```
+
+* List the keywords that occur most frequently (`freq`):
+```{r}
+res <- slowrake(txt)[[1]]
+res2 <- aggregate(freq ~ keyword + stem, data = res, FUN = sum)
+res2[order(res2$freq, decreasing = TRUE), ]
+```
+
+* Run RAKE on a vector of documents instead of just one document:
+```{r}
+slowrake(txt = dog_pubs$abstract[1:10])
+```
+
+[^1]: Technically the original version of RAKE allows some keywords to contain stop words, but `slowrake()` doesn't support this.

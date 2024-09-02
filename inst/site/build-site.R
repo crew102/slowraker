@@ -1,3 +1,5 @@
+# devtools::install_version("pkgdown", "1.6.1")
+
 swap_render_fun <- function() {
 
   # Alter pkgdown:::build_rmarkdown_format

@@ -4,7 +4,9 @@
 \name{pos_tags}
 \alias{pos_tags}
 \title{Part-of-speech (POS) tags}
-\format{An object of class \code{data.frame} with 36 rows and 2 columns.}
+\format{
+An object of class \code{data.frame} with 36 rows and 2 columns.
+}
 \usage{
 pos_tags
 }

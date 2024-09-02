@@ -15,3 +15,5 @@
 ^pkgdown$
 ^codecov\.yml$
 ^\.github$
+^doc$
+^Meta$

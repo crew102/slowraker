@@ -4,7 +4,9 @@
 \name{smart_words}
 \alias{smart_words}
 \title{SMART stop words}
-\format{An object of class \code{character} of length 571.}
+\format{
+An object of class \code{character} of length 571.
+}
 \usage{
 smart_words
 }

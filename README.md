@@ -1,7 +1,8 @@
 slowraker
 ================
 
-> A slow version of the Rapid Automatic Keyword Extraction (RAKE) algorithm
+> A slow version of the Rapid Automatic Keyword Extraction (RAKE)
+> algorithm
 
 [![R-CMD-check](https://github.com/crew102/slowraker/workflows/R-CMD-check/badge.svg)](https://github.com/crew102/slowraker/actions)
 [![CRAN
@@ -9,8 +10,7 @@ version](http://www.r-pkg.org/badges/version/slowraker)](https://cran.r-project.
 [![Coverage
 status](https://codecov.io/gh/crew102/slowraker/branch/master/graph/badge.svg)](https://codecov.io/github/crew102/slowraker?branch=master)
 
-Installation
-------------
+## Installation
 
 You can get the stable version from CRAN:
 
@@ -27,10 +27,12 @@ if (!"devtools" %in% rownames(installed.packages()))
 devtools::install_github("crew102/slowraker")
 ```
 
-Basic usage
------------
+## Basic usage
 
-There is one main function in the `slowraker` package - `slowrake()`. `slowrake()` extracts keywords from a vector of documents using the RAKE algorithm. This algorithm doesn't require any training data, so it's super easy to use:
+There is one main function in the `slowraker` package - `slowrake()`.
+`slowrake()` extracts keywords from a vector of documents using the RAKE
+algorithm. This algorithm doesn’t require any training data, so it’s
+super easy to use:
 
 ``` r
 library(slowraker)
@@ -39,7 +41,8 @@ data("dog_pubs")
 rakelist <- slowrake(txt = dog_pubs$abstract[1:5])
 ```
 
-`slowrake()` outputs a list of data frames. Each data frame contains the keywords that were extracted for a given document:
+`slowrake()` outputs a list of data frames. Each data frame contains the
+keywords that were extracted for a given document:
 
 ``` r
 rakelist
@@ -77,8 +80,11 @@ head(rakedf, 5)
 #> 5 seemingli inappropri dog
 ```
 
-Learning more
--------------
+## Learning more
 
--   To learn about how RAKE works as well as the basics of `slowrake()`, check out the "Getting started" vignette (`vignette("getting-started")`). Frequently asked questions are answered in the FAQs vignette (`vignette("faqs")`).
--   All documentation is also on the package's [website](https://crew102.github.io/slowraker/index.html)
+- To learn about how RAKE works as well as the basics of `slowrake()`,
+  check out the “Getting started” vignette
+  (`vignette("getting-started")`). Frequently asked questions are
+  answered in the FAQs vignette (`vignette("faqs")`).
+- All documentation is also on the package’s
+  [website](https://crew102.github.io/slowraker/index.html)

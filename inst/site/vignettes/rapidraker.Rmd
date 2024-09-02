@@ -25,7 +25,7 @@ options(width = 100, digits = 2)
 
 ## What is `rapidraker`?
 
-`rapidraker` is an R package that provides an implementation of the same keyword extraction algorithm (RAKE) that `slowraker` does. However, `rapidraker::rapidrake()` is written mostly in Java while `slowraker::slowrake()` is written mostly in R. This means that you can expect `rapidrake()` to be considerably faster than `slowrake()`.
+`rapidraker` provides an implementation of the same keyword extraction algorithm (RAKE) that `slowraker` does, but it's written in Java instead of R. This makes it a bit faster than `slowraker`.
 
 ## Installation
 
@@ -62,7 +62,7 @@ rakelist <- rapidrake(txt = dog_pubs$abstract[1:5])
 head(rbind_rakelist(rakelist))
 ```
 
-## Performance of `slowraker` vs `rapidraker`
+## Performance comparison
 
 ```{r, results = 'hide'}
 txt <- rep(dog_pubs$abstract, 20)
@@ -71,21 +71,21 @@ sr_time <- system.time(slowrake(txt))[["elapsed"]]
 rr_time <- system.time(rapidrake(txt))[["elapsed"]]
 ```
 
-In this example, `slowrake()` took `r sr_time` seconds to execute while `rapidrake()` took `r rr_time` seconds. In other words, `rapidrake()` was about `r round(sr_time / rr_time, 0)` times faster than `slowrake()`.
+In this example, `rapidrake()` took `r rr_time` seconds to execute while `slowrake()` took `r sr_time`, making the Java version about about `r round(sr_time / rr_time, 0)` times faster.
 
 ## Making `rapidrake()` even faster
 
-Executing RAKE is an example of an embarrassingly parallel problem. As such, it doesn't take much to parallelize `rapidrake()`:
+We can parallelize extraction across documents like so:
 
 ```{r}
-# The following code was run on an 8 core Windows 7 machine
+# The following code was run on aarch64-apple-darwin20, 12 cores
 library(parallel)
 library(doParallel)
 library(foreach)
 
 cores <- detectCores()
 # Make txt vector larger so we can more easily see the speed improvement of parallelization
-txt2 <- rep(txt, cores) 
+txt2 <- rep(txt, cores * 3) 
 by <- floor(length(txt2) / cores)
 
 cl <- makeCluster(cores)
@@ -102,4 +102,4 @@ rr_par_time <- system.time(
 stopCluster(cl)
 ```
 
-The sequential version of `rapidrake()` took `r rr_time` seconds to extract keywords for `r length(txt)` documents, while the parallel version took `r rr_par_time` seconds to extract keywords for `r length(txt2)` documents. This suggests that the parallel version was about `r round(rr_time * cores / rr_par_time, 0)` times faster than the regular version.
+The sequential version of `rapidrake()` took `r rr_time` seconds to extract keywords for `r length(txt)` documents, while the parallel version took `r rr_par_time` seconds for `r length(txt2)` documents. This suggests that the parallel version was about `r round(rr_time * cores * 3 / rr_par_time, 0)` times faster than the regular version.
